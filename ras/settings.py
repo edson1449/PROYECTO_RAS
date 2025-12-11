@@ -101,23 +101,13 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'railway',
         'USER': 'root',
-        'PASSWORD': 'zozKbyYKpOPtbZsgpEeMKCXglLpDtTON',
+        'PASSWORD': 'pxPcALNCFdxSbDGkXWLrlvAQPnNATSDI',
         'HOST': 'mysql.railway.internal',
         'PORT': '3306'
 
     }
 }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('railway'),
-        'USER': os.environ.get('root'),
-        'PASSWORD': os.environ.get('zozKbyYKpOPtbZsgpEeMKCXglLpDtTON'),
-        'HOST': os.environ.get('mysql.railway.internal'),
-        'PORT': os.environ.get('3306'),
-    }
-}
 
 
 # Password validation
