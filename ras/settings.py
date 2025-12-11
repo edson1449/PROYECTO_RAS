@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = 'django-insecure-xni)vpo%pu6+i-^*1bi13fw#fjo32xw+c(%vl_t7g6rl+*5ppn'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -98,11 +98,12 @@ WSGI_APPLICATION = 'ras.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': os.environ.get('DB_HOST'),
-        'PORT': os.environ.get('DB_PORT', '3306'),
+        'NAME': 'ProyectoRAS$RAS',
+        'USER': 'ProyectoRAS',
+        'PASSWORD': 'Ras123456',
+        'HOST': 'ProyectoRAS.mysql.pythonanywhere-services.com',
+        'PORT': '3306'
+
     }
 }
 
