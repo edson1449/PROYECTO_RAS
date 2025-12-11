@@ -59,6 +59,8 @@ INSTALLED_APPS = [
 ]
 LOGIN_URL = '/login/'
 
+CSFR_TRUSTED_ORIGINS = ['https://proyectoras-production-6931.up.railway.app']
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
