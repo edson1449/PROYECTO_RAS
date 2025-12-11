@@ -59,7 +59,7 @@ INSTALLED_APPS = [
 ]
 LOGIN_URL = '/login/'
 
-CSFR_TRUSTED_ORIGINS = ['https://proyectoras-production-6931.up.railway.app']
+CSFR_TRUSTED_ORIGINS = ['https://proyectoras-production-dead.up.railway.app']
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -103,7 +103,8 @@ DATABASES = {
         'USER': 'root',
         'PASSWORD': 'zozKbyYKpOPtbZsgpEeMKCXglLpDtTON',
         'HOST': 'mysql.railway.internal',
-        'PORT': '55693',
+        'PORT': '3306'
+
     }
 }
 
