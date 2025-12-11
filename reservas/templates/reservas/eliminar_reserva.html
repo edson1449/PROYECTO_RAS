@@ -1,0 +1,597 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eliminar Reserva - SENA</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --sena: #2b794d;
+            --sena-dark: #1f5139;
+            --danger: #ef4444;
+            --gray-50: #fafbfc;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            color: var(--gray-800);
+            min-height: 100vh;
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            background: white;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--gray-100);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+
+        .navbar-brand {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--sena) !important;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .navbar-brand img {
+            height: 42px;
+            width: auto;
+            border-radius: 6px;
+        }
+
+        .user-badge {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 16px;
+            background: #f0f8f4;
+            border-radius: 12px;
+            border: 1px solid #e8f4ed;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--sena) 0%, #3d9a63 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--gray-900);
+        }
+
+        .user-role {
+            font-size: 0.75rem;
+            color: var(--sena);
+            font-weight: 500;
+        }
+
+        .btn-logout {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-logout:hover {
+            background: #dc2626;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(239, 68, 68, 0.3);
+            color: white;
+        }
+
+        /* ===== PAGE CONTAINER ===== */
+        .page-wrapper {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+
+        .page-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 1.5rem;
+        }
+
+        /* ===== MAIN CARD ===== */
+        .delete-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--gray-100);
+            width: 100%;
+            max-width: 550px;
+            overflow: hidden;
+        }
+
+        /* ===== CARD HEADER ===== */
+        .card-header-delete {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            padding: 3rem 2rem;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .card-header-delete::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .header-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .card-header-delete h2 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 1.8rem;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+            letter-spacing: -0.5px;
+        }
+
+        /* ===== CARD BODY ===== */
+        .card-body-delete {
+            padding: 2.5rem;
+        }
+
+        /* ===== WARNING BOX ===== */
+        .warning-box {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(220, 38, 38, 0.05) 100%);
+            border: 2px solid #fecaca;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .warning-box-icon {
+            font-size: 1.8rem;
+            color: #dc2626;
+            flex-shrink: 0;
+        }
+
+        .warning-box-text h4 {
+            color: #991b1b;
+            font-weight: 700;
+            font-size: 1rem;
+            margin: 0 0 0.5rem 0;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .warning-box-text p {
+            color: var(--gray-700);
+            margin: 0;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* ===== DETAILS SECTION ===== */
+        .details-box {
+            background: var(--gray-50);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--gray-200);
+        }
+
+        .details-box h5 {
+            color: var(--gray-900);
+            font-weight: 700;
+            font-family: 'Outfit', sans-serif;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.05rem;
+        }
+
+        .details-box h5 i {
+            color: var(--danger);
+        }
+
+        .details-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .detail-item:last-child {
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: var(--gray-700);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .detail-label i {
+            color: var(--danger);
+            width: 18px;
+        }
+
+        .detail-value {
+            color: var(--gray-900);
+            font-weight: 500;
+            text-align: right;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-approved {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-rejected {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* ===== ACTION BUTTONS ===== */
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-action {
+            padding: 0.9rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn-delete-now {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-delete-now:hover {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+            color: white;
+        }
+
+        .btn-cancel-delete {
+            background: var(--gray-100);
+            color: var(--gray-700);
+            border: 1px solid var(--gray-200);
+        }
+
+        .btn-cancel-delete:hover {
+            background: var(--gray-200);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            color: var(--gray-900);
+        }
+
+        /* ===== INFO NOTICE ===== */
+        .info-notice {
+            background: linear-gradient(135deg, rgba(43, 121, 77, 0.08) 0%, rgba(59, 130, 77, 0.05) 100%);
+            border-left: 4px solid var(--sena);
+            border-radius: 8px;
+            padding: 1rem;
+            color: var(--gray-800);
+            font-size: 0.85rem;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            border: 1px solid rgba(43, 121, 77, 0.2);
+        }
+
+        .info-notice i {
+            color: var(--sena);
+            flex-shrink: 0;
+            margin-top: 0.1rem;
+        }
+
+        .info-notice strong {
+            color: var(--gray-900);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .page-content {
+                padding: 2rem 1rem;
+            }
+
+            .card-header-delete {
+                padding: 2rem 1.5rem;
+            }
+
+            .card-body-delete {
+                padding: 1.5rem;
+            }
+
+            .header-icon {
+                font-size: 2.5rem;
+            }
+
+            .card-header-delete h2 {
+                font-size: 1.5rem;
+            }
+
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .detail-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .detail-value {
+                text-align: left;
+                margin-top: 0.5rem;
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .card-header-delete {
+                padding: 1.5rem 1rem;
+            }
+
+            .card-body-delete {
+                padding: 1.25rem;
+            }
+
+            .header-icon {
+                font-size: 2rem;
+            }
+
+            .card-header-delete h2 {
+                font-size: 1.3rem;
+            }
+
+            .warning-box {
+                padding: 1rem;
+            }
+
+            .details-box {
+                padding: 1rem;
+            }
+
+            .detail-label {
+                font-size: 0.85rem;
+            }
+
+            .btn-action {
+                padding: 0.8rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'panel_admin' %}">
+                <img src="{% static 'logo_ras.jpg' %}" alt="Logo RAS SENA">
+                <span>Sistema R.A.S</span>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav ms-auto" style="gap: 1rem; display: flex; align-items: center;">
+                    <div class="user-badge" style="margin-right: 15px;">
+                        <div class="user-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="user-info">
+                            <div class="user-name">{{ request.session.user_name }}</div>
+                            <div class="user-role">
+                                {% if request.session.user_tipo == 'admin' %}
+                                    Administrador
+                                {% else %}
+                                    Funcionario
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                    <a class="btn btn-logout" href="{% url 'logout' %}">
+                        <i class="fas fa-sign-out-alt"></i> Salir
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- PAGE WRAPPER -->
+    <div class="page-wrapper">
+        <div class="page-content">
+            <div class="delete-card">
+                <!-- HEADER -->
+                <div class="card-header-delete">
+                    
+                    <h2>Eliminar Reserva</h2>
+                </div>
+
+                <!-- BODY -->
+                <div class="card-body-delete">
+                    <!-- WARNING -->
+                    <div class="warning-box">
+                        <div class="warning-box-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="warning-box-text">
+                            <h4>¡Acción Irreversible!</h4>
+                            <p>Una vez eliminada, la reserva no podrá ser recuperada. Por favor, verifique los datos antes de confirmar.</p>
+                        </div>
+                    </div>
+
+                    <!-- DETAILS -->
+                    <div class="details-box">
+                        <h5><i class="fas fa-info-circle"></i>Detalles de la Reserva</h5>
+                        
+                        <div class="details-list">
+                            <div class="detail-item">
+                                <span class="detail-label"><i class="fas fa-hashtag"></i>Código</span>
+                                <span class="detail-value">{{ reserva.cod_reserva }}</span>
+                            </div>
+
+                            <div class="detail-item">
+                                <span class="detail-label"><i class="fas fa-heading"></i>Título</span>
+                                <span class="detail-value">{{ reserva.titulo_reserva }}</span>
+                            </div>
+
+                            <div class="detail-item">
+                                <span class="detail-label"><i class="fas fa-calendar-day"></i>Fecha</span>
+                                <span class="detail-value">{{ reserva.fecha }}</span>
+                            </div>
+
+                            <div class="detail-item">
+                                <span class="detail-label"><i class="fas fa-hourglass-half"></i>Horario</span>
+                                <span class="detail-value">{{ reserva.hora_ini }} - {{ reserva.hora_fin }}</span>
+                            </div>
+
+                            <div class="detail-item">
+                                <span class="detail-label"><i class="fas fa-door-open"></i>Ambiente</span>
+                                <span class="detail-value">{{ reserva.cod_ambiente_fk.nom_amb }}</span>
+                            </div>
+
+                            <div class="detail-item">
+                                <span class="detail-label"><i class="fas fa-people-group"></i>Personas</span>
+                                <span class="detail-value">{{ reserva.num_personas }}</span>
+                            </div>
+
+                            <div class="detail-item">
+                                <span class="detail-label"><i class="fas fa-tag"></i>Estado</span>
+                                <span class="detail-value">
+                                    {% if reserva.estado == 'pendiente' %}
+                                        <span class="status-badge status-pending">
+                                            <i class="fas fa-clock"></i> Pendiente
+                                        </span>
+                                    {% elif reserva.estado == 'aprobada' %}
+                                        <span class="status-badge status-approved">
+                                            <i class="fas fa-check"></i> Aprobada
+                                        </span>
+                                    {% elif reserva.estado == 'rechazada' %}
+                                        <span class="status-badge status-rejected">
+                                            <i class="fas fa-times"></i> Rechazada
+                                        </span>
+                                    {% else %}
+                                        <span class="status-badge">{{ reserva.get_estado_display }}</span>
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ACTIONS -->
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="action-buttons">
+                            <button type="submit" class="btn-action btn-delete-now">
+                                <i class="fas fa-trash"></i>Eliminar
+                            </button>
+                            <a href="{% url 'reservas:listar_reservas' %}" class="btn-action btn-cancel-delete">
+                                <i class="fas fa-arrow-left"></i>Atrás
+                            </a>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
+</body>
+</html>

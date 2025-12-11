@@ -1,0 +1,660 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Usuario | Sistema R.A.S - SENA</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --sena: #2b794d;
+            --sena-dark: #1f5139;
+            --sena-light: #e8f4ed;
+            --sena-lighter: #f0f8f4;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --gray-50: #fafbfc;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #eef2ff 100%);
+            color: var(--gray-800);
+            min-height: 100vh;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            background: white;
+            padding: 1.2rem 0;
+            border-bottom: 1px solid var(--gray-100);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+
+        .navbar-brand {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--sena) !important;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .navbar-brand img {
+            height: 42px;
+            width: auto;
+            border-radius: 6px;
+        }
+
+        .nav-user-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-badge {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 16px;
+            background: var(--sena-lighter);
+            border-radius: 12px;
+            border: 1px solid var(--sena-light);
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--sena) 0%, #3d9a63 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--gray-900);
+        }
+
+        .user-role {
+            font-size: 0.75rem;
+            color: var(--sena);
+            font-weight: 500;
+        }
+
+        .btn-logout {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-logout:hover {
+            background: #dc2626;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(239, 68, 68, 0.3);
+            color: white;
+        }
+
+        /* PAGE HEADER */
+        .page-header {
+            background: linear-gradient(135deg, var(--sena) 0%, #3d9a63 50%, var(--sena-dark) 100%);
+            padding: 3rem 0;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+
+        .page-header-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            color: white;
+        }
+
+        .page-header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 2rem;
+            margin: 0;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .page-header h1 i {
+            font-size: 2.2rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        /* MAIN CONTAINER */
+        .main-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 1.5rem 4rem;
+        }
+
+        /* CARD */
+        .card {
+            border-radius: 16px;
+            background: white;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.12);
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        /* FORM LABELS */
+        label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--gray-700);
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        label i {
+            color: var(--sena);
+            font-size: 0.95rem;
+        }
+
+        /* FORM INPUTS */
+        .form-control, .form-select {
+            border-radius: 10px;
+            border: 1.5px solid var(--gray-200);
+            padding: 0.75rem 1rem;
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--sena);
+            box-shadow: 0 0 0 3px rgba(43, 121, 77, 0.1);
+            outline: none;
+        }
+
+        /* FORM SECTIONS */
+        .form-section {
+            background: linear-gradient(135deg, var(--sena-lighter) 0%, var(--gray-50) 100%);
+            border-radius: 12px;
+            padding: 1.8rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--sena-light);
+        }
+
+        .form-section h5 {
+            font-family: 'Outfit', sans-serif;
+            color: var(--sena-dark);
+            font-weight: 700;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1rem;
+        }
+
+        .form-section h5 i {
+            font-size: 1.3rem;
+            background: linear-gradient(135deg, var(--sena) 0%, #3d9a63 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* BUTTONS */
+        .btn {
+            border-radius: 10px;
+            font-weight: 700;
+            padding: 0.75rem 1.8rem;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--sena) 0%, #3d9a63 100%);
+            color: white;
+            box-shadow: 0 6px 20px rgba(43, 121, 77, 0.25);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(43, 121, 77, 0.35);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+            color: white;
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.25);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.35);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--gray-200);
+            color: var(--gray-800);
+            border: 1.5px solid var(--gray-300);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-300);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+            color: var(--gray-900);
+        }
+
+        /* ACTION BUTTONS */
+        .actions-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--gray-200);
+            flex-wrap: wrap;
+        }
+
+        .actions-left {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .actions-right {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* ALERTS */
+        .alert {
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            font-weight: 500;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid;
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            color: var(--sena-dark);
+            border-left-color: var(--sena);
+        }
+
+        .alert-danger {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            color: #7f1d1d;
+            border-left-color: var(--danger);
+        }
+
+        .alert i {
+            margin-right: 8px;
+            font-size: 1.1rem;
+        }
+
+        /* ERROR TEXT */
+        .error-message {
+            color: var(--danger);
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-top: 0.4rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .error-message::before {
+            content: '⚠';
+            font-size: 0.9rem;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .page-header {
+                padding: 2rem 0;
+                margin-bottom: 1.5rem;
+            }
+
+            .page-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .main-container {
+                padding: 0 1rem 2rem;
+            }
+
+            .card-body {
+                padding: 1.5rem;
+            }
+
+            .form-section {
+                padding: 1.2rem;
+                margin-bottom: 1rem;
+            }
+
+            .actions-footer {
+                flex-direction: column-reverse;
+            }
+
+            .actions-left, .actions-right {
+                width: 100%;
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar-brand {
+                font-size: 1rem;
+            }
+
+            .navbar-brand span {
+                display: none;
+            }
+
+            .page-header h1 {
+                font-size: 1.2rem;
+                gap: 8px;
+            }
+
+            .page-header h1 i {
+                font-size: 1.6rem;
+            }
+
+            .user-avatar {
+                width: 28px;
+                height: 28px;
+                font-size: 0.75rem;
+            }
+
+            .form-section h5 {
+                font-size: 1rem;
+            }
+
+            .btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'panel_admin' %}">
+                <img src="{% static 'logo_ras.jpg' %}" alt="Logo RAS SENA">
+                <span>Sistema R.A.S</span>
+            </a>
+
+            <div class="nav-user-section ms-auto">
+                <div class="user-badge">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-info">
+                        <div class="user-name">{{ request.session.user_name }}</div>
+                        <div class="user-role">{% if request.session.user_tipo == 'admin' %}Administrador{% else %}Funcionario{% endif %}</div>
+                    </div>
+                </div>
+                <a class="btn btn-logout" href="{% url 'logout' %}">
+                    <i class="fas fa-sign-out-alt"></i> Salir
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+        <div class="container">
+            <div class="page-header-content">
+                <h1>
+                     Crear Nuevo Usuario
+                </h1>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-container">
+        <!-- ALERTAS -->
+        {% if messages %}
+        <div id="msg-container">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                <i class="fas fa-check-circle"></i> {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            {% endfor %}
+        </div>
+        <script>
+            setTimeout(function() {
+                document.querySelectorAll('#msg-container .alert').forEach(alert => {
+                    new bootstrap.Alert(alert).close();
+                });
+            }, 4000);
+        </script>
+        {% endif %}
+
+        <!-- FORMULARIO CARD -->
+        <div class="card">
+            <div class="card-body">
+                <form method="post" novalidate>
+                    {% csrf_token %}
+
+                    <!-- SECCIÓN: DOCUMENTO -->
+                    <div class="form-section">
+                        <h5><i class="fas fa-id-card"></i> Información de Documento</h5>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.id.id_for_label }}">
+                                    <i class="fas fa-passport"></i> {{ form.id.label }}
+                                </label>
+                                {{ form.id }}
+                                {% if form.id.errors %}
+                                <div class="error-message">{{ form.id.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECCIÓN: INFORMACIÓN PERSONAL -->
+                    <div class="form-section">
+                        <h5><i class="fas fa-user"></i> Información Personal</h5>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.nombre.id_for_label }}">
+                                    <i class="fas fa-user-check"></i> {{ form.nombre.label }}
+                                </label>
+                                {{ form.nombre }}
+                                {% if form.nombre.errors %}
+                                <div class="error-message">{{ form.nombre.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.telefono.id_for_label }}">
+                                    <i class="fas fa-phone"></i> {{ form.telefono.label }}
+                                </label>
+                                {{ form.telefono }}
+                                {% if form.telefono.errors %}
+                                <div class="error-message">{{ form.telefono.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.email.id_for_label }}">
+                                    <i class="fas fa-envelope"></i> {{ form.email.label }}
+                                </label>
+                                {{ form.email }}
+                                {% if form.email.errors %}
+                                <div class="error-message">{{ form.email.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.tipo.id_for_label }}">
+                                    <i class="fas fa-briefcase"></i> {{ form.tipo.label }}
+                                </label>
+                                {{ form.tipo }}
+                                {% if form.tipo.errors %}
+                                <div class="error-message">{{ form.tipo.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECCIÓN: CONTRASEÑA -->
+                    <div class="form-section">
+                        <h5><i class="fas fa-lock"></i> Contraseña de Acceso</h5>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.nueva_password.id_for_label }}">
+                                    <i class="fas fa-key"></i> {{ form.nueva_password.label }}
+                                </label>
+                                {{ form.nueva_password }}
+                                {% if form.nueva_password.errors %}
+                                <div class="error-message">{{ form.nueva_password.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.confirmar_password.id_for_label }}">
+                                    <i class="fas fa-check-circle"></i> {{ form.confirmar_password.label }}
+                                </label>
+                                {{ form.confirmar_password }}
+                                {% if form.confirmar_password.errors %}
+                                <div class="error-message">{{ form.confirmar_password.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECCIÓN: UBICACIÓN ORGANIZACIONAL -->
+                    <div class="form-section">
+                        <h5><i class="fas fa-building"></i> Ubicación Organizacional</h5>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.cod_centro_fk.id_for_label }}">
+                                    <i class="fas fa-map-pin"></i> {{ form.cod_centro_fk.label }}
+                                </label>
+                                {{ form.cod_centro_fk }}
+                                {% if form.cod_centro_fk.errors %}
+                                <div class="error-message">{{ form.cod_centro_fk.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.cod_coordinacion_fk.id_for_label }}">
+                                    <i class="fas fa-sitemap"></i> {{ form.cod_coordinacion_fk.label }}
+                                </label>
+                                {{ form.cod_coordinacion_fk }}
+                                {% if form.cod_coordinacion_fk.errors %}
+                                <div class="error-message">{{ form.cod_coordinacion_fk.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ACCIONES -->
+                    <div class="actions-footer">
+                        <div class="actions-left">
+                            <a href="{% url 'listar_usuarios' %}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Cancelar
+                            </a>
+                        </div>
+                        <div class="actions-right">
+                            <a href="{% url 'carga_masiva' %}" class="btn btn-success">
+                                <i class="fas fa-file-upload"></i> Carga Masiva
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Crear Usuario
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

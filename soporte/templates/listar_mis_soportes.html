@@ -1,0 +1,580 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Soportes - SENA</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --sena: #2b794d;
+            --sena-dark: #1f5139;
+            --sena-light: #e8f4ed;
+            --sena-lighter: #f0f8f4;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #06b6d4;
+            --gray-50: #fafbfc;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-500: #9ca3af;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #eef2ff 100%);
+            color: var(--gray-800);
+            min-height: 100vh;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            background: white;
+            padding: 1.2rem 0;
+            border-bottom: 1px solid var(--gray-100);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+
+        .navbar-brand {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--sena) !important;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .navbar-brand img {
+            height: 42px;
+            width: auto;
+            border-radius: 6px;
+        }
+
+        .nav-user-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-badge {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 16px;
+            background: var(--sena-lighter);
+            border-radius: 12px;
+            border: 1px solid var(--sena-light);
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--sena) 0%, #3d9a63 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--gray-900);
+        }
+
+        .user-role {
+            font-size: 0.75rem;
+            color: var(--sena);
+            font-weight: 500;
+        }
+
+        .btn-logout {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-logout:hover {
+            background: #dc2626;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(239, 68, 68, 0.3);
+            color: white;
+        }
+
+        /* PAGE HEADER */
+        .page-header {
+            background: linear-gradient(135deg, var(--sena) 0%, #3d9a63 50%, var(--sena-dark) 100%);
+            padding: 3.0rem 0 2.5rem 0;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 2.5rem;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+
+        .page-header-content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .page-header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 2rem;
+            margin: 0;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .page-header-subtitle {
+            color: #e5f7ed;
+            font-size: 0.95rem;
+        }
+
+        /* MAIN CONTAINER */
+        .main-container {
+            max-width: 1380px;
+            margin: 0 auto;
+            padding: 0 1.5rem 3rem;
+        }
+
+        /* CARD */
+        .card {
+            border-radius: 16px;
+            background: white;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .card-body {
+            padding: 1.5rem 1.5rem 1.25rem 1.5rem;
+            background: white;
+        }
+
+        .card-footer {
+            background: var(--gray-50);
+            border-top: 1px solid var(--gray-100);
+            padding: 0.9rem 1.5rem 1.1rem 1.5rem;
+        }
+
+        .card-title {
+            color: var(--gray-900) !important;
+            font-weight: 700;
+        }
+
+        .card-title i {
+            color: var(--sena);
+        }
+
+        /* BADGES */
+        .badge {
+            padding: 0.35rem 0.7rem;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .badge-priority-alta,
+        .badge-prioridad-alta {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+        }
+
+        .badge-priority-media,
+        .badge-prioridad-media {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+        }
+
+        .badge-priority-baja,
+        .badge-prioridad-baja {
+            background: linear-gradient(135deg, var(--sena) 0%, #3d9a63 100%);
+            color: white;
+        }
+
+        .badge-estado-abierto {
+            background: linear-gradient(135deg, var(--sena) 0%, #3d9a63 100%);
+            color: white;
+        }
+
+        .badge-estado-en_proceso {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+        }
+
+        .badge-estado-cerrado {
+            background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+            color: white;
+        }
+
+        /* BOTONES */
+        .btn {
+            border-radius: 10px;
+            font-weight: 700;
+            padding: 10px 22px;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+        }
+
+        .btn-primary,
+        .btn-success {
+            background: linear-gradient(135deg, var(--sena) 0%, #3d9a63 100%);
+            color: white;
+            box-shadow: 0 6px 20px rgba(43, 121, 77, 0.25);
+        }
+
+        .btn-primary:hover,
+        .btn-success:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(43, 121, 77, 0.35);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--gray-200);
+            color: var(--gray-800);
+            border: 1.5px solid var(--gray-300);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-300);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+            color: var(--gray-900);
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, var(--info) 0%, #0891b2 100%);
+            color: white;
+            box-shadow: 0 3px 10px rgba(6, 182, 212, 0.2);
+        }
+
+        .btn-info:hover {
+            background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(6, 182, 212, 0.3);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 8px 14px;
+            font-size: 0.8rem;
+        }
+
+        /* ALERTS */
+        .alert {
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            font-weight: 500;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid;
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            color: var(--sena-dark);
+            border-left-color: var(--sena);
+        }
+
+        .alert-danger {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            color: #7f1d1d;
+            border-left-color: var(--danger);
+        }
+
+        .alert-warning {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            color: #78350f;
+            border-left-color: var(--warning);
+        }
+
+        /* EMPTY STATE */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--gray-700);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: var(--gray-300);
+            margin-bottom: 1rem;
+        }
+
+        /* TEXT UTILITIES */
+        .text-muted {
+            color: var(--gray-500) !important;
+        }
+
+        .text-dark {
+            color: var(--gray-800) !important;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .page-header {
+                padding: 2rem 0 1.8rem 0;
+                margin-bottom: 2rem;
+            }
+
+            .page-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .main-container {
+                padding: 0 1rem 2rem;
+            }
+
+            .btn {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar-brand {
+                font-size: 1rem;
+            }
+
+            .navbar-brand span {
+                display: none;
+            }
+
+            .page-header h1 {
+                font-size: 1.2rem;
+                gap: 8px;
+            }
+
+            .page-header h1 i {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <a class="navbar-brand" href="{% if request.session.user_tipo == 'admin' %}{% url 'panel_admin' %}{% else %}{% url 'panel_funcionario' %}{% endif %}">
+            <img src="{% static 'logo_ras.jpg' %}" alt="Logo RAS SENA" class="me-2">
+            <span>Sistema R.A.S</span>
+        </a>
+
+        <div class="nav-user-section ms-auto">
+            <div class="user-badge">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div>
+                    <div class="user-name">
+                        {{ request.session.user_name }}
+                    </div>
+                    <div class="user-role">
+                        {% if request.session.user_tipo == 'admin' %}
+                            Administrador
+                        {% else %}
+                            Funcionario
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <a class="btn btn-logout btn-sm"
+               href="{% url 'logout' %}">
+                <i class="fas fa-sign-out-alt"></i> Salir
+            </a>
+        </div>
+    </div>
+</nav>
+
+<div class="page-header">
+    <div class="container">
+        <div class="page-header-content">
+            <div>
+                <h1>
+                    <i class="fas fa-headset"></i> Mis solicitudes de soporte
+                </h1>
+                <p class="page-header-subtitle mb-0">
+                    Historial de incidencias que has reportado
+                </p>
+            </div>
+            <a href="{% url 'soporte:crear_soporte' %}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Nueva Solicitud
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="main-container">
+
+    {% if messages %}
+    <div id="msg-container">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} fade show mt-2" role="alert">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        setTimeout(function() {
+            document.querySelectorAll('#msg-container .alert').forEach(a => new bootstrap.Alert(a).close());
+        }, 4000);
+    </script>
+    {% endif %}
+
+    <div class="row">
+        {% for soporte in soportes %}
+        <div class="col-xl-4 col-lg-6 col-md-6 mb-4">
+            <div class="card h-100">
+
+                <div class="card-body">
+                    <h5 class="card-title mb-3">
+                        <i class="fas fa-headset me-2"></i> {{ soporte.asunto }}
+                    </h5>
+
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <small class="text-muted d-block mb-1">
+                                <i class="fas fa-flag me-1"></i>Prioridad
+                            </small>
+                            <span class="badge
+                                {% if soporte.prioridad == 'alta' %}badge-priority-alta
+                                {% elif soporte.prioridad == 'media' %}badge-priority-media
+                                {% else %}badge-priority-baja{% endif %}">
+                                {{ soporte.prioridad|title }}
+                            </span>
+                        </div>
+                        <div class="col-6">
+                            <small class="text-muted d-block mb-1">
+                                <i class="fas fa-info-circle me-1"></i>Estado
+                            </small>
+                            <span class="badge
+                                {% if soporte.estado == 'abierto' %}badge-estado-abierto
+                                {% elif soporte.estado == 'en_proceso' %}badge-estado-en_proceso
+                                {% else %}badge-estado-cerrado{% endif %}">
+                                {{ soporte.estado|title }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="mb-2">
+                        <small class="text-muted d-block mb-1">
+                            <i class="fas fa-calendar-alt me-1"></i>Creado
+                        </small>
+                        <div class="text-dark small">
+                            {{ soporte.creado_en|date:"d/m/Y H:i" }}
+                        </div>
+                    </div>
+
+                    <div class="mb-2">
+                        <small class="text-muted d-block mb-1">
+                            <i class="fas fa-book me-1"></i>Reserva relacionada
+                        </small>
+                        <div class="text-dark small">
+                            {% if soporte.reserva %}
+                                {{ soporte.reserva }}
+                            {% else %}
+                                <span style="color: var(--gray-500);">Sin reserva asociada</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="mb-0">
+                        <small class="text-muted d-block mb-1">
+                            <i class="fas fa-align-left me-1"></i>Descripción
+                        </small>
+                        <p class="mb-0 small text-dark">
+                            {{ soporte.descripcion|truncatechars:120 }}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card-footer text-center">
+                    <a href="{% url 'soporte:detalle_soporte' soporte.id %}" class="btn btn-info btn-sm w-100">
+                        Ver conversación
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="card w-100">
+            <div class="empty-state">
+                <i class="fas fa-headset fa-3x mb-3"></i>
+                <h4>No has registrado solicitudes de soporte</h4>
+                <p>Crea una nueva solicitud para reportar una incidencia.</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="mt-3 text-end">
+        <a href="{% if request.session.user_tipo == 'admin' %}{% url 'panel_admin' %}{% else %}{% url 'panel_funcionario' %}{% endif %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-1"></i> Volver al Panel
+        </a>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,2077 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Reserva - SENA</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --sena: #2b794d;
+            --sena-dark: #1f5139;
+            --sena-light: #e8f4ed;
+            --sena-lighter: #f0f8f4;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #06b6d4;
+            --gray-50: #fafbfc;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            color: var(--gray-800);
+            min-height: 100vh;
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            background: white;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--gray-100);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+
+        .navbar-brand {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--sena) !important;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .navbar-brand img {
+            height: 42px;
+            width: auto;
+            border-radius: 6px;
+        }
+
+        .nav-user-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-badge {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 16px;
+            background: var(--sena-lighter);
+            border-radius: 12px;
+            border: 1px solid var(--sena-light);
+            margin-right: 15px;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--sena) 0%, #3d9a63 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--gray-900);
+        }
+
+        .user-role {
+            font-size: 0.75rem;
+            color: var(--sena);
+            font-weight: 500;
+        }
+
+        .btn-logout {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-logout:hover {
+            background: #dc2626;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(239, 68, 68, 0.3);
+            color: white;
+        }
+
+        /* ===== PAGE HEADER ===== */
+        .page-header {
+            background: linear-gradient(135deg, var(--sena) 0%, #1f5139 100%);
+            padding: 3rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+
+        .page-header-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            color: white;
+        }
+
+        .page-header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 2.4rem;
+            margin-bottom: 0;
+            letter-spacing: -0.5px;
+        }
+
+        /* ===== MAIN CONTAINER ===== */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem 4rem;
+        }
+
+        /* ===== CARD ===== */
+        .card {
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+            border: 1px solid var(--gray-100);
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        /* ===== FORM SECTIONS ===== */
+        .form-section {
+            background: var(--gray-50);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.03);
+            border: 1px solid var(--gray-100);
+        }
+
+        .form-section h5 {
+            color: var(--sena-dark);
+            border-bottom: 2px solid var(--sena);
+            padding-bottom: 0.75rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+        }
+
+        .form-section h5 i {
+            color: var(--sena);
+        }
+
+        label {
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        input, select, textarea {
+            border-radius: 10px !important;
+            padding: 0.7rem !important;
+            border: 1.5px solid var(--gray-200) !important;
+            transition: all 0.3s ease !important;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            box-shadow: 0 0 0 3px rgba(43, 121, 77, 0.08) !important;
+            border-color: var(--sena) !important;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            border-radius: 10px;
+            font-weight: 600;
+            padding: 11px 26px;
+            transition: all 0.3s ease;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--sena) 0%, #3d9a63 100%);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #1f5139 0%, var(--sena) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(43, 121, 77, 0.25);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--gray-200);
+            color: var(--gray-700);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-300);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+            color: var(--gray-900);
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #d97706;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(245, 158, 11, 0.3);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(239, 68, 68, 0.3);
+            color: white;
+        }
+
+        .btn-info {
+            background: var(--info);
+            color: white;
+        }
+
+        .btn-info:hover {
+            background: #0891b2;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(6, 182, 212, 0.3);
+            color: white;
+        }
+
+        /* ===== CALENDAR ===== */
+        #calendar {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .fc-toolbar {
+            background: linear-gradient(135deg, var(--sena), var(--sena-dark));
+            color: white;
+            padding: 15px;
+            margin: 0 !important;
+            border: none;
+        }
+
+        .fc-toolbar-title {
+            font-weight: 700;
+            color: white;
+            font-size: 1.4rem;
+        }
+
+        .fc-button {
+            background-color: white !important;
+            color: var(--sena) !important;
+            border: none !important;
+            border-radius: 8px !important;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .fc-button:hover:not(.fc-button-active) {
+            background-color: #f3f4f6 !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .fc-button-active {
+            background-color: var(--sena) !important;
+            color: white !important;
+        }
+
+        .fc-timegrid-slot {
+            height: 40px !important;
+        }
+
+        .fc-event {
+            cursor: pointer;
+            border-radius: 6px;
+            font-size: 0.85em;
+            transition: all 0.2s ease;
+        }
+
+        .fc-event:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transform: translateY(-1px);
+        }
+
+        .fc-day-today {
+            background-color: rgba(43, 121, 77, 0.08) !important;
+        }
+
+        /* ===== STEP INDICATOR ===== */
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--gray-200);
+            color: var(--gray-600);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .step-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: center;
+            color: var(--gray-700);
+        }
+
+        .step.active .step-number {
+            background-color: var(--sena);
+            color: white;
+            box-shadow: 0 4px 12px rgba(43, 121, 77, 0.3);
+        }
+
+        .step.completed .step-number {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .step-section {
+            display: none;
+        }
+
+        .step-section.active {
+            display: block;
+        }
+
+        /* ===== DISPLAY BOXES ===== */
+        .selected-time-display {
+            background: linear-gradient(135deg, var(--sena), var(--sena-dark));
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 4px 12px rgba(43, 121, 77, 0.15);
+        }
+
+        .environment-badge {
+            background: var(--sena-lighter);
+            color: var(--sena-dark);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            display: inline-block;
+            border: 1px solid var(--sena-light);
+        }
+
+        /* ===== AVAILABILITY INFO ===== */
+        .availability-info {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid;
+        }
+
+        .conflict-warning {
+            background-color: #fef2f2;
+            border-left-color: var(--danger);
+            color: #991b1b;
+        }
+
+        .selected-slot {
+            background-color: #f0fdf4;
+            border-left-color: #28a745;
+            color: #166534;
+        }
+
+        .info-slot {
+            background-color: var(--sena-lighter);
+            border-left-color: var(--sena);
+            color: var(--gray-800);
+        }
+
+        /* ===== ALERTS ===== */
+        .alert {
+            border: none;
+            border-radius: 12px;
+            border-left: 4px solid;
+            padding: 1rem 1.25rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            margin-bottom: 1.5rem;
+        }
+
+        .alert-info {
+            background: #eff6ff;
+            color: #1e40af;
+            border-left-color: #06b6d4;
+        }
+
+        .alert-warning {
+            background: #fefce8;
+            color: #854d0e;
+            border-left-color: #f59e0b;
+        }
+
+        .alert-success {
+            background: #f0fdf4;
+            color: #15803d;
+            border-left-color: #28a745;
+        }
+
+        .alert-danger {
+            background: #fef2f2;
+            color: #991b1b;
+            border-left-color: #ef4444;
+        }
+
+        /* ===== FORM ===== */
+        .form-check {
+            margin-bottom: 0.75rem;
+        }
+
+        .form-check-input {
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .form-check-input:checked {
+            background-color: var(--sena);
+            border-color: var(--sena);
+        }
+
+        textarea.form-control {
+            border-radius: 10px;
+            border: 1px solid var(--gray-200);
+            padding: 11px 14px;
+            transition: all 0.3s ease;
+        }
+
+        textarea.form-control:focus {
+            border-color: var(--sena);
+            box-shadow: 0 0 0 3px rgba(43, 121, 77, 0.08);
+        }
+
+        /* ===== UTILITIES ===== */
+        .d-flex.justify-content-between {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .text-muted {
+            color: var(--gray-600) !important;
+        }
+
+        .text-success {
+            color: #28a745 !important;
+        }
+
+        .text-info {
+            color: var(--info) !important;
+        }
+
+        .text-danger {
+            color: var(--danger) !important;
+        }
+
+        .badge {
+            padding: 0.35em 0.65em;
+            border-radius: 0.25rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .bg-primary {
+            background-color: var(--info) !important;
+            color: white;
+        }
+
+        .form-text {
+            display: block;
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--gray-600);
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-select {
+            border-radius: 10px;
+            border: 1px solid var(--gray-200);
+            padding: 11px 14px;
+            transition: all 0.3s ease;
+        }
+
+        .form-select:focus {
+            border-color: var(--sena);
+            box-shadow: 0 0 0 3px rgba(43, 121, 77, 0.08);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 1.5rem 1rem 2.5rem;
+            }
+
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .d-flex.justify-content-between {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            #calendar {
+                height: 400px;
+            }
+
+            .form-section {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-header h1 {
+                font-size: 1.4rem;
+            }
+
+            .navbar-brand {
+                font-size: 1rem;
+            }
+
+            .main-container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Reserva - SENA</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --sena: #2b794d;
+            --sena-dark: #1f5139;
+            --sena-light: #e8f4ed;
+            --sena-lighter: #f0f8f4;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #06b6d4;
+            --gray-50: #fafbfc;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            color: var(--gray-800);
+            min-height: 100vh;
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            background: white;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--gray-100);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+
+        .navbar-brand {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--sena) !important;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .navbar-brand img {
+            height: 42px;
+            width: auto;
+            border-radius: 6px;
+        }
+
+        .user-badge {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 16px;
+            background: var(--sena-lighter);
+            border-radius: 12px;
+            border: 1px solid var(--sena-light);
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--sena) 0%, #3d9a63 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--gray-900);
+        }
+
+        .user-role {
+            font-size: 0.75rem;
+            color: var(--sena);
+            font-weight: 500;
+        }
+
+        .btn-logout {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-logout:hover {
+            background: #dc2626;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(239, 68, 68, 0.3);
+            color: white;
+        }
+
+        /* ===== PAGE HEADER ===== */
+        .page-header {
+            background: linear-gradient(135deg, var(--sena) 0%, #1f5139 100%);
+            padding: 3rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+
+        .page-header-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            color: white;
+        }
+
+        .page-header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 2.4rem;
+            margin-bottom: 0;
+            letter-spacing: -0.5px;
+        }
+
+        /* ===== MAIN CONTAINER ===== */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem 4rem;
+        }
+
+        /* ===== FORM SECTIONS ===== */
+        .form-section {
+            background: var(--gray-50);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.03);
+            border: 1px solid var(--gray-100);
+        }
+
+        .form-section h5 {
+            color: var(--sena-dark);
+            border-bottom: 2px solid var(--sena);
+            padding-bottom: 0.75rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+        }
+
+        .form-section h5 i {
+            color: var(--sena);
+        }
+
+        label {
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        input, select, textarea {
+            border-radius: 10px !important;
+            padding: 0.7rem !important;
+            border: 1.5px solid var(--gray-200) !important;
+            transition: all 0.3s ease !important;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            box-shadow: 0 0 0 3px rgba(43, 121, 77, 0.08) !important;
+            border-color: var(--sena) !important;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            border-radius: 10px;
+            font-weight: 600;
+            padding: 11px 26px;
+            transition: all 0.3s ease;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--sena) 0%, #3d9a63 100%);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #1f5139 0%, var(--sena) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(43, 121, 77, 0.25);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--gray-200);
+            color: var(--gray-700);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-300);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+            color: var(--gray-900);
+        }
+
+        /* ===== CALENDAR ===== */
+        #calendar {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            min-height: 500px;
+        }
+
+        .fc-toolbar {
+            background: linear-gradient(135deg, var(--sena), var(--sena-dark));
+            color: white;
+            padding: 15px;
+            margin: 0 !important;
+            border: none;
+        }
+
+        .fc-toolbar-title {
+            font-weight: 700;
+            color: white;
+            font-size: 1.4rem;
+        }
+
+        .fc-button {
+            background-color: white !important;
+            color: var(--sena) !important;
+            border: none !important;
+            border-radius: 8px !important;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .fc-button:hover:not(.fc-button-active) {
+            background-color: #f3f4f6 !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .fc-button-active {
+            background-color: var(--sena) !important;
+            color: white !important;
+        }
+
+        .fc-timegrid-slot {
+            height: 40px !important;
+        }
+
+        .fc-event {
+            cursor: pointer;
+            border-radius: 6px;
+            font-size: 0.85em;
+            transition: all 0.2s ease;
+        }
+
+        .fc-event:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transform: translateY(-1px);
+        }
+
+        .fc-day-today {
+            background-color: rgba(43, 121, 77, 0.08) !important;
+        }
+
+        /* ===== STEP INDICATOR ===== */
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--gray-200);
+            color: var(--gray-600);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .step-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: center;
+            color: var(--gray-700);
+        }
+
+        .step.active .step-number {
+            background-color: var(--sena);
+            color: white;
+            box-shadow: 0 4px 12px rgba(43, 121, 77, 0.3);
+        }
+
+        .step.completed .step-number {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .step-section {
+            display: none;
+        }
+
+        .step-section.active {
+            display: block;
+        }
+
+        /* ===== DISPLAY BOXES ===== */
+        .selected-time-display {
+            background: linear-gradient(135deg, var(--sena), var(--sena-dark));
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 4px 12px rgba(43, 121, 77, 0.15);
+        }
+
+        .environment-badge {
+            background: var(--sena-lighter);
+            color: var(--sena-dark);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            display: inline-block;
+            border: 1px solid var(--sena-light);
+        }
+
+        /* ===== AVAILABILITY INFO ===== */
+        .availability-info {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid;
+        }
+
+        .conflict-warning {
+            background-color: #fef2f2;
+            border-left-color: var(--danger);
+            color: #991b1b;
+        }
+
+        .selected-slot {
+            background-color: #f0fdf4;
+            border-left-color: #28a745;
+            color: #166534;
+        }
+
+        .info-slot {
+            background-color: var(--sena-lighter);
+            border-left-color: var(--sena);
+            color: var(--gray-800);
+        }
+
+        /* ===== ALERTS ===== */
+        .alert {
+            border: none;
+            border-radius: 12px;
+            border-left: 4px solid;
+            padding: 1rem 1.25rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            margin-bottom: 1.5rem;
+        }
+
+        .alert-info {
+            background: #eff6ff;
+            color: #1e40af;
+            border-left-color: #06b6d4;
+        }
+
+        .alert-warning {
+            background: #fefce8;
+            color: #854d0e;
+            border-left-color: #f59e0b;
+        }
+
+        /* ===== UTILITIES ===== */
+        .d-flex.justify-content-between {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .badge {
+            padding: 0.35em 0.65em;
+            border-radius: 0.25rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .bg-primary {
+            background-color: var(--info) !important;
+            color: white;
+        }
+
+        .form-text {
+            display: block;
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--gray-600);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 1.5rem 1rem 2.5rem;
+            }
+
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .d-flex.justify-content-between {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            #calendar {
+                min-height: 400px;
+            }
+
+            .form-section {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-header h1 {
+                font-size: 1.4rem;
+            }
+
+            .navbar-brand {
+                font-size: 1rem;
+            }
+
+            .main-container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'panel_admin' %}">
+                <img src="{% static 'logo_ras.jpg' %}" alt="Logo RAS SENA">
+                <span>Sistema R.A.S</span>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav ms-auto" style="gap: 1rem; display: flex; align-items: center;">
+                    <div class="user-badge" style="margin-right: 15px;">
+                        <div class="user-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div>
+                            <div class="user-name">{{ request.session.user_name }}</div>
+                            <div class="user-role">
+                                {% if request.session.user_tipo == 'admin' %}
+                                    Administrador
+                                {% else %}
+                                    Funcionario
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <a class="btn btn-logout" href="{% url 'logout' %}">
+                        <i class="fas fa-sign-out-alt"></i> Salir
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+        <div class="page-header-content">
+            <h1>
+               Crear Nueva Reserva
+            </h1>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-container">
+        {% if messages %}
+        <div id="msg-container">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            {% endfor %}
+        </div>
+        <script>
+            setTimeout(function() {
+                document.querySelectorAll('#msg-container .alert').forEach(alert => {
+                    new bootstrap.Alert(alert).close();
+                });
+            }, 4000);
+        </script>
+        {% endif %}
+
+        <!-- STEP INDICATOR -->
+        <div class="step-indicator">
+            <div class="step active" id="step1">
+                <div class="step-number">1</div>
+                <div class="step-label">Seleccionar Ambiente</div>
+            </div>
+            <div class="step" id="step2">
+                <div class="step-number">2</div>
+                <div class="step-label">Fecha y Hora</div>
+            </div>
+            <div class="step" id="step3">
+                <div class="step-number">3</div>
+                <div class="step-label">Detalles</div>
+            </div>
+        </div>
+
+        <!-- FORM -->
+        <form method="post" id="reservationForm">
+            {% csrf_token %}
+            <input type="hidden" name="estado" value="Pendiente">
+
+            <!-- STEP 1: ENVIRONMENT SELECTION -->
+            <div class="step-section active" id="section1">
+                <div class="form-section">
+                    <h5><i class="fas fa-door-open me-2"></i>Selección de Ambiente</h5>
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <label class="form-label">Ambiente</label>
+                            <select name="cod_ambiente_fk" id="id_cod_ambiente_fk" class="form-select" required>
+                                <option value="">Seleccione un ambiente</option>
+                                {% for amb in ambientes %}
+                                <option value="{{ amb.cod_amb }}" data-capacidad="{{ amb.capacidad_amb }}" {% if form_cod_ambiente_fk_id == amb.cod_amb|stringformat:"s" %}selected{% endif %}>
+                                    {{ amb.nom_amb }} (Capacidad: {{ amb.capacidad_amb }})
+                                </option>
+                                {% endfor %}
+                            </select>
+                            <div class="availability-info info-slot mt-3" id="availabilityInfo">
+                                <strong><i class="fas fa-info-circle me-2"></i>Instrucciones:</strong>
+                                Seleccione un ambiente disponible para ver sus horarios
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <button type="button" class="btn btn-secondary" id="btnVolver">
+                        <i class="fas fa-arrow-left me-1"></i>
+                        {% if request.session.user_tipo == 'admin' %}
+                            Volver al Panel Admin
+                        {% else %}
+                            Volver
+                        {% endif %}
+                    </button>
+                    <button type="button" class="btn btn-success" id="nextToStep2">
+                        Siguiente <i class="fas fa-arrow-right ms-1"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 2: DATE & TIME SELECTION -->
+            <div class="step-section" id="section2">
+                <div class="form-section">
+                    <h5><i class="fas fa-calendar-alt me-2"></i>Fecha y Hora</h5>
+
+                    <div class="mb-3">
+                        <label class="form-label">Ambiente seleccionado:</label>
+                        <div class="environment-badge" id="selectedEnvironment">
+                            <i class="fas fa-door-open me-2"></i>
+                            {% if form_cod_ambiente_fk_id %}
+                                {% for amb in ambientes %}
+                                    {% if amb.cod_amb|stringformat:"s" == form_cod_ambiente_fk_id %}
+                                        {{ amb.nom_amb }} (Capacidad: {{ amb.capacidad_amb }})
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                Ningún ambiente seleccionado
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div id="calendar"></div>
+
+                    <div class="selected-time-display" id="timeSelectionDisplay" style="display: none;">
+                        <div class="row text-center">
+                            <div class="col-md-3">
+                                <strong>Fecha:</strong><br>
+                                <span id="displayDate">-</span>
+                            </div>
+                            <div class="col-md-3">
+                                <strong>Hora Inicio:</strong><br>
+                                <span id="displayStartTime">-</span>
+                            </div>
+                            <div class="col-md-3">
+                                <strong>Hora Fin:</strong><br>
+                                <span id="displayEndTime">-</span>
+                            </div>
+                            <div class="col-md-3">
+                                <strong>Duración:</strong><br>
+                                <span id="displayDuration">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mt-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Fecha</label>
+                            <input type="date" class="form-control" id="id_fecha" name="fecha" value="{{ form_fecha|default_if_none:'' }}" required readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Hora Inicio</label>
+                            <input type="time" class="form-control" id="id_hora_ini" name="hora_ini" value="{{ form_hora_ini|default_if_none:'' }}" required readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Hora Fin</label>
+                            <input type="time" class="form-control" id="id_hora_fin" name="hora_fin" value="{{ form_hora_fin|default_if_none:'' }}" required readonly>
+                        </div>
+                    </div>
+
+                    <div class="availability-info info-slot mt-3" id="timeSlotInfo">
+                        <strong><i class="fas fa-info-circle me-2"></i>Instrucciones:</strong>
+                        Haga clic y arrastre en el calendario para seleccionar el horario deseado. Los horarios en rojo ya están reservados.
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <button type="button" class="btn btn-secondary" id="backToStep1">
+                        <i class="fas fa-arrow-left me-1"></i> Anterior
+                    </button>
+                    <button type="button" class="btn btn-success" id="nextToStep3">
+                        Siguiente <i class="fas fa-arrow-right ms-1"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 3: DETAILS -->
+            <div class="step-section" id="section3">
+                {% if es_administrador %}
+                <div class="form-section">
+                    <h5><i class="fas fa-user-shield me-2"></i>Asignar Reserva a Funcionario</h5>
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Como administrador</strong>, debe asignar esta reserva a un funcionario.
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <label class="form-label">Seleccionar Funcionario</label>
+                            <select class="form-select" id="id_usuario_asignado" name="usuario_asignado" required>
+                                <option value>Seleccione un funcionario</option>
+                                {% for funcionario in funcionarios %}
+                                <option value="{{ funcionario.id }}" {% if form_usuario_asignado_id == funcionario.id|stringformat:"s" %}selected{% endif %}>
+                                    {{ funcionario.nombre }} - {{ funcionario.email }}
+                                </option>
+                                {% empty %}
+                                <option value>No hay funcionarios disponibles</option>
+                                {% endfor %}
+                            </select>
+                            <small class="form-text">Esta reserva será asignada al funcionario seleccionado.</small>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="form-section">
+                    <h5><i class="fas fa-user me-2"></i>Información del Solicitante</h5>
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Reserva personal:</strong> Esta reserva será asignada a su usuario.
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <strong>Nombre:</strong> {{ request.session.user_name }}
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Rol:</strong>
+                            <span class="badge bg-primary">Funcionario</span>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="form-section">
+                    <h5><i class="fas fa-info-circle me-2"></i>Información Básica</h5>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Título de la Reserva</label>
+                            <input type="text" class="form-control" id="id_titulo_reserva" name="titulo_reserva" placeholder="Ingrese el título" value="{{ form_titulo_reserva|default_if_none:'' }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Tipo de Reserva</label>
+                            <select class="form-select" id="id_tipo_reserva" name="tipo_reserva" required>
+                                <option value>Seleccione el tipo</option>
+                                <option value="reunion" {% if form_tipo_reserva == 'reunion' %}selected{% endif %}>Reunión</option>
+                                <option value="estudio" {% if form_tipo_reserva == 'estudio' %}selected{% endif %}>Estudio</option>
+                                <option value="evento" {% if form_tipo_reserva == 'evento' %}selected{% endif %}>Evento</option>
+                                <option value="presentacion" {% if form_tipo_reserva == 'presentacion' %}selected{% endif %}>Presentación</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label">Estado de la Reserva</label>
+                            <div class="alert alert-warning">
+                                <i class="fas fa-clock me-2"></i><strong>Pendiente</strong>
+                                <small class="d-block mt-1">El estado se establecerá automáticamente como "Pendiente"</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h5><i class="fas fa-users me-2"></i>Detalles de la Reserva</h5>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="id_num_personas" class="form-label">
+                                <i class="fas fa-users me-2"></i>Número de Personas
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input type="number" class="form-control" id="id_num_personas" name="num_personas" min="1" step="1" required autocomplete="off" value="{{ num_personas_error|default_if_none:'' }}">
+                            <small id="capacidadTexto" class="form-text"></small>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Ambiente</label>
+                            <div class="environment-badge" id="finalEnvironment">
+                                <i class="fas fa-door-open me-2"></i>
+                                {% if form_cod_ambiente_fk_id %}
+                                    {% for amb in ambientes %}
+                                        {% if amb.cod_amb|stringformat:"s" == form_cod_ambiente_fk_id %}
+                                            {{ amb.nom_amb }} (Capacidad: {{ amb.capacidad_amb }})
+                                        {% endif %}
+                                    {% endfor %}
+                                {% else %}
+                                    Ningún ambiente seleccionado
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Motivo</label>
+                            <textarea class="form-control" id="id_motivo" name="motivo" rows="4" placeholder="Ingrese el motivo" required>{{ form_motivo|default_if_none:'' }}</textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section selected-slot">
+                    <h5><i class="fas fa-calendar-check me-2"></i>Resumen de la Reserva</h5>
+                    <div class="row">
+                        <div class="col-md-6 mb-2"><strong>Ambiente:</strong> <span id="summaryEnvironment">-</span></div>
+                        <div class="col-md-6 mb-2"><strong>Fecha:</strong> <span id="summaryDate">-</span></div>
+                        <div class="col-md-6 mb-2"><strong>Hora Inicio:</strong> <span id="summaryStartTime">-</span></div>
+                        <div class="col-md-6 mb-2"><strong>Hora Fin:</strong> <span id="summaryEndTime">-</span></div>
+                        <div class="col-md-12 mb-2"><strong>Duración:</strong> <span id="summaryDuration">-</span></div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <button type="button" class="btn btn-secondary" id="backToStep2">
+                        <i class="fas fa-arrow-left me-1"></i> Anterior
+                    </button>
+                    <button type="submit" class="btn btn-success" id="submitReservation">
+                        <i class="fas fa-check me-1"></i> Crear Reserva
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales/es.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const environmentSelect = document.getElementById('id_cod_ambiente_fk');
+    const selectedEnvironment = document.getElementById('selectedEnvironment');
+    const finalEnvironment = document.getElementById('finalEnvironment');
+    const timeSelectionDisplay = document.getElementById('timeSelectionDisplay');
+    const timeSlotInfo = document.getElementById('timeSlotInfo');
+    const fechaInput = document.getElementById('id_fecha');
+    const horaIniInput = document.getElementById('id_hora_ini');
+    const horaFinInput = document.getElementById('id_hora_fin');
+    const selectAmbiente = document.getElementById('id_cod_ambiente_fk') || environmentSelect;
+    const inputPersonas = document.getElementById('id_num_personas');
+    const spanCapacidad = document.getElementById('capacidadTexto');
+
+    let calendar;
+    let selectedEnvironmentId = null;
+    let selectedEnvironmentName = null;
+    let tempEvent = null;
+    let existingReservations = [];
+    const rolUsuario = "{{ request.session.user_tipo }}";
+
+    initializeCalendar();
+    setupEventListeners();
+    setupCapacidadValidation();
+    aplicarStepErrorDesdeServidor();
+
+    function initializeCalendar() {
+        const calendarEl = document.getElementById('calendar');
+        if (!calendarEl) return;
+        calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'timeGridWeek',
+            locale: 'es',
+            headerToolbar: { left: 'prev,next today', center: 'title', right: 'timeGridWeek,timeGridDay' },
+            slotMinTime: '06:00:00',
+            slotMaxTime: '22:00:00',
+            slotDuration: '01:00:00',
+            allDaySlot: false,
+            weekends: false,
+            selectable: true,
+            selectMirror: true,
+            selectOverlap: false,
+            navLinks: true,
+            businessHours: { daysOfWeek: [1,2,3,4,5], startTime: '07:00', endTime: '20:00' },
+            select: function(info) { handleDateSelection(info); },
+            events: function(fetchInfo, successCallback, failureCallback) {
+                getEventsForEnvironment(fetchInfo, successCallback, failureCallback);
+            },
+            selectAllow: function(selectInfo) {
+                return isTimeSlotAvailable(selectInfo.start, selectInfo.end);
+            },
+            validRange: { start: new Date() },
+            slotLabelFormat: { hour: '2-digit', minute: '2-digit', hour12: false },
+            eventTimeFormat: { hour: '2-digit', minute: '2-digit', hour12: false },
+            selectMinDistance: 60,
+            snapDuration: '01:00:00',
+            selectLongPressDelay: 0,
+            unselectAuto: false,
+            eventDisplay: 'block',
+            eventColor: '#dc3545',
+            eventTextColor: 'white'
+        });
+        calendar.render();
+    }
+
+    function irAPanelPorRol() {
+        const destino = "{{ request.session.user_tipo }}" === 'admin'
+            ? "{% url 'panel_admin' %}"
+            : "{% url 'panel_funcionario' %}";
+        window.location.assign(destino);
+    }
+
+    function enPasoActivo(numero) {
+        const section = document.getElementById(`section${numero}`);
+        return section && section.classList.contains('active');
+    }
+
+    function setupEventListeners() {
+        const nextToStep2 = document.getElementById('nextToStep2');
+        const nextToStep3 = document.getElementById('nextToStep3');
+        const backToStep1 = document.getElementById('backToStep1');
+        const backToStep2 = document.getElementById('backToStep2');
+        const reservationForm = document.getElementById('reservationForm');
+        const btnVolver = document.getElementById('btnVolver');
+
+        if (nextToStep2) nextToStep2.addEventListener('click', function(e) {
+            e.preventDefault();
+            goToStep2();
+        });
+
+        if (nextToStep3) nextToStep3.addEventListener('click', function(e) {
+            e.preventDefault();
+            goToStep3();
+        });
+
+        if (backToStep1) backToStep1.addEventListener('click', function(e) {
+            e.preventDefault();
+            volverPaso2a1();
+        });
+
+        if (backToStep2) backToStep2.addEventListener('click', function(e) {
+            e.preventDefault();
+            volverPaso3a2();
+        });
+
+        if (reservationForm) reservationForm.addEventListener('submit', validateForm);
+
+        if (btnVolver) btnVolver.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (enPasoActivo(3)) { volverPaso3a2(); return; }
+            if (enPasoActivo(2)) { volverPaso2a1(); return; }
+            if (enPasoActivo(1)) { irAPanelPorRol(); return; }
+            irAPanelPorRol();
+        });
+
+        if (environmentSelect) {
+            environmentSelect.addEventListener('change', function() {
+                if (this.value) {
+                    selectedEnvironmentId = this.value;
+                    const selectedOption = this.options[this.selectedIndex];
+                    selectedEnvironmentName = selectedOption.text;
+                }
+            });
+        }
+
+        if (selectAmbiente && spanCapacidad && inputPersonas) {
+            selectAmbiente.addEventListener('change', actualizarCapacidad);
+            actualizarCapacidad();
+        }
+    }
+
+    function volverPaso2a1() {
+        const s1 = document.getElementById('section1');
+        const s2 = document.getElementById('section2');
+        const st1 = document.getElementById('step1');
+        const st2 = document.getElementById('step2');
+
+        if (s2) s2.classList.remove('active');
+        if (s1) s1.classList.add('active');
+
+        if (st2) { st2.classList.remove('active'); st2.classList.remove('completed'); }
+        if (st1) st1.classList.add('active');
+
+        const resumen = document.getElementById('timeSelectionDisplay');
+        if (resumen) resumen.style.display = 'none';
+
+        const fecha = document.getElementById('id_fecha');
+        const hIni = document.getElementById('id_hora_ini');
+        const hFin = document.getElementById('id_hora_fin');
+        if (fecha) fecha.value = '';
+        if (hIni) hIni.value = '';
+        if (hFin) hFin.value = '';
+
+        if (typeof tempEvent !== 'undefined' && tempEvent) {
+            tempEvent.remove();
+            tempEvent = null;
+        }
+    }
+
+    function volverPaso3a2() {
+        const s2 = document.getElementById('section2');
+        const s3 = document.getElementById('section3');
+        const st2 = document.getElementById('step2');
+        const st3 = document.getElementById('step3');
+
+        if (s3) s3.classList.remove('active');
+        if (s2) s2.classList.add('active');
+
+        if (st3) st3.classList.remove('active');
+        if (st2) st2.classList.add('active');
+
+        const resumen = document.getElementById('timeSelectionDisplay');
+        if (resumen) resumen.style.display = 'none';
+    }
+
+    function setupCapacidadValidation() {
+        if (!inputPersonas) return;
+        inputPersonas.addEventListener('input', validarCapacidad);
+    }
+
+    function actualizarCapacidad() {
+        const opcion = selectAmbiente.options[selectAmbiente.selectedIndex];
+        if (!opcion) return;
+
+        const capacidad = opcion.getAttribute('data-capacidad');
+        if (capacidad) {
+            spanCapacidad.textContent = `Capacidad del ambiente: ${capacidad} personas`;
+            inputPersonas.setAttribute('max', capacidad);
+        } else {
+            spanCapacidad.textContent = '';
+            inputPersonas.removeAttribute('max');
+        }
+    }
+
+    function validarCapacidad() {
+        const numPersonas = parseInt(inputPersonas.value);
+        const maxCapacidad = parseInt(inputPersonas.getAttribute('max'));
+
+        inputPersonas.classList.remove('is-invalid', 'is-valid');
+
+        let errorCapacidad = document.getElementById('error-capacidad');
+        if (!errorCapacidad) {
+            errorCapacidad = document.createElement('div');
+            errorCapacidad.id = 'error-capacidad';
+            errorCapacidad.className = 'invalid-feedback';
+            errorCapacidad.style.display = 'none';
+            inputPersonas.parentNode.appendChild(errorCapacidad);
+        }
+
+        if (!numPersonas || isNaN(numPersonas)) {
+            inputPersonas.classList.remove('is-valid');
+            errorCapacidad.style.display = 'none';
+            return;
+        }
+
+        if (numPersonas <= 0) {
+            inputPersonas.classList.add('is-invalid');
+            errorCapacidad.innerHTML = 'El número de personas debe ser mayor a 0';
+            errorCapacidad.style.display = 'block';
+            return;
+        }
+
+        if (maxCapacidad && numPersonas > maxCapacidad) {
+            inputPersonas.classList.add('is-invalid');
+            errorCapacidad.innerHTML = `Capacidad excedida. Ingresaste ${numPersonas} y el máximo es ${maxCapacidad}.`;
+            errorCapacidad.style.display = 'block';
+            return;
+        }
+
+        inputPersonas.classList.add('is-valid');
+        errorCapacidad.style.display = 'none';
+    }
+
+    function goToStep2() {
+        if (!environmentSelect || !environmentSelect.value) {
+            alert('Por favor, seleccione un ambiente antes de continuar.');
+            return;
+        }
+
+        const selectedOption = environmentSelect.options[environmentSelect.selectedIndex];
+
+        if (selectedEnvironment) selectedEnvironment.textContent = selectedOption.text;
+        if (finalEnvironment) finalEnvironment.textContent = selectedOption.text;
+
+        selectedEnvironmentId = environmentSelect.value;
+        selectedEnvironmentName = selectedOption.text;
+
+        changeStep(1, 2);
+        
+        // Cargar reservas DESPUÉS de cambiar el step
+        setTimeout(() => {
+            loadExistingReservations(selectedEnvironmentId);
+        }, 300);
+    }
+
+    function goToStep3() {
+        if (!fechaInput || !horaIniInput || !horaFinInput) return;
+        if (!fechaInput.value || !horaIniInput.value || !horaFinInput.value) {
+            alert('Por favor, seleccione una fecha y hora en el calendario antes de continuar.');
+            return;
+        }
+        const start = new Date(`${fechaInput.value}T${horaIniInput.value}`);
+        const end = new Date(`${fechaInput.value}T${horaFinInput.value}`);
+        if (checkTimeConflict(start, end)) {
+            alert('Este horario ya no está disponible. Por favor, seleccione otro horario.');
+            return;
+        }
+        updateReservationSummary();
+        changeStep(2, 3);
+    }
+
+    function changeStep(from, to) {
+        const sectionFrom = document.getElementById(`section${from}`);
+        const stepFrom = document.getElementById(`step${from}`);
+        const sectionTo = document.getElementById(`section${to}`);
+        const stepTo = document.getElementById(`step${to}`);
+        if (sectionFrom) sectionFrom.classList.remove('active');
+        if (stepFrom) stepFrom.classList.remove('active');
+        if (sectionTo) sectionTo.classList.add('active');
+        if (stepTo) stepTo.classList.add('active');
+        if (to > from && stepFrom) stepFrom.classList.add('completed');
+    }
+
+    function loadExistingReservations(ambienteId) {
+        if (!timeSlotInfo) return;
+        timeSlotInfo.innerHTML = '<strong>Cargando reservas...</strong>';
+        fetch('/reservas/api/reservas/')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    existingReservations = data.reservas.filter(r => {
+                        const estado = (r.estado || '').toLowerCase();
+                        return String(r.ambiente_id) === String(ambienteId) &&
+                               (estado === 'aprobada' || estado === 'recibida');
+                    });
+                    if (calendar) calendar.refetchEvents();
+                    updateAvailabilityInfo();
+                    timeSlotInfo.innerHTML =
+                        `<strong class="text-success">Reservas cargadas correctamente</strong><br>` +
+                        `<small>Mostrando reservas aprobadas y recibidas para: ${selectedEnvironmentName}</small>`;
+                } else {
+                    throw new Error(data.error);
+                }
+            })
+            .catch(error => {
+                timeSlotInfo.innerHTML =
+                    `<strong class="text-danger">Error cargando reservas: ${error.message}</strong>`;
+                existingReservations = [];
+            });
+    }
+
+    function getEventsForEnvironment(fetchInfo, successCallback, failureCallback) {
+        const events = [];
+
+        existingReservations.forEach(reserva => {
+            const startDateTime = `${reserva.fecha}T${reserva.hora_ini}`;
+            const endDateTime = `${reserva.fecha}T${reserva.hora_fin}`;
+            const estado = (reserva.estado || '').toLowerCase();
+            let titlePrefix = '[APROBADA]';
+            let color = '#28a745';
+
+            if (reserva.estado === 'recibida') {
+                titlePrefix = '[RECIBIDA]';
+                color = '#0d6efd';
+            }
+
+            let title = `${titlePrefix} ${reserva.titulo_reserva}`;
+            if (rolUsuario === 'admin') {
+                title += ` (${reserva.usuario})`;
+            }
+
+            events.push({
+                title: title,
+                start: startDateTime,
+                end: endDateTime,
+                color: color,
+                textColor: 'white',
+                extendedProps: {
+                    isExisting: true,
+                    ambienteId: reserva.ambiente_id,
+                    estado: reserva.estado,
+                    usuario: reserva.usuario
+                },
+                display: 'block',
+                classNames: ['reserva-existente']
+            });
+        });
+
+        successCallback(events);
+    }
+
+    function updateAvailabilityInfo() {
+        if (!timeSlotInfo) return;
+
+        const reservasAmbiente = existingReservations;
+        const totalReservas = reservasAmbiente.length;
+        const hoy = new Date().toISOString().split('T')[0];
+        const reservasHoy = reservasAmbiente.filter(r => r.fecha === hoy).length;
+
+        timeSlotInfo.innerHTML = `
+            <strong class="text-info">Disponibilidad de ${selectedEnvironmentName}:</strong>
+            <br><small>Total de reservas (aprobadas/recibidas): ${totalReservas}</small>
+            <br><small>Reservas para hoy: ${reservasHoy}</small>
+            <br><small>Mínimo 1 hora, máximo 4 horas</small>
+        `;
+        timeSlotInfo.className = 'availability-info info-slot';
+    }
+
+    function isTimeSlotAvailable(start, end) {
+        const now = new Date();
+
+        if (start < now) {
+            showTemporaryMessage('No puede seleccionar horarios en el pasado.', 'error');
+            return false;
+        }
+
+        const duration = (end - start) / (1000 * 60);
+        if (duration < 60) {
+            showTemporaryMessage('La reserva mínima es de 1 hora.', 'error');
+            return false;
+        }
+        if (duration > 240) {
+            showTemporaryMessage('La reserva máxima es de 4 horas.', 'error');
+            return false;
+        }
+
+        const startMinutes = start.getMinutes();
+        const endMinutes = end.getMinutes();
+        if (startMinutes !== 0 || endMinutes !== 0) {
+            showTemporaryMessage('Las reservas deben ser en horas completas.', 'error');
+            return false;
+        }
+
+        if (checkTimeConflict(start, end)) {
+            showTemporaryMessage('Este horario ya está reservado.', 'error');
+            return false;
+        }
+
+        return true;
+    }
+
+    function checkTimeConflict(start, end) {
+        if (!selectedEnvironmentId || !selectedEnvironmentName) return true;
+        return existingReservations.some(reserva => {
+            const estado = (reserva.estado || '').toLowerCase();
+            if (estado !== 'aprobada' && estado !== 'recibida') return false;
+            const reservaStart = new Date(`${reserva.fecha}T${reserva.hora_ini}`);
+            const reservaEnd = new Date(`${reserva.fecha}T${reserva.hora_fin}`);
+            return (start < reservaEnd && end > reservaStart);
+        });
+    }
+
+    function showTemporaryMessage(message, type = 'info') {
+        if (!timeSlotInfo) return;
+
+        const originalContent = timeSlotInfo.innerHTML;
+        const originalClass = timeSlotInfo.className;
+
+        timeSlotInfo.innerHTML =
+            `<strong class="text-${type === 'error' ? 'danger' : 'info'}">${message}</strong>`;
+        timeSlotInfo.className =
+            `availability-info ${type === 'error' ? 'conflict-warning' : 'info-slot'}`;
+
+        setTimeout(() => {
+            timeSlotInfo.innerHTML = originalContent;
+            timeSlotInfo.className = originalClass;
+        }, 3000);
+    }
+
+    function handleDateSelection(selectionInfo) {
+        const start = selectionInfo.start;
+        const end = selectionInfo.end;
+
+        const adjustedStart = adjustToNearestHour(start);
+        const adjustedEnd = adjustToNearestHour(end);
+
+        if ((adjustedEnd - adjustedStart) / (1000 * 60 * 60) < 1) {
+            adjustedEnd.setTime(adjustedStart.getTime() + 60 * 60 * 1000);
+        }
+
+        if (tempEvent) tempEvent.remove();
+
+        if (!isTimeSlotAvailable(adjustedStart, adjustedEnd)) return;
+
+        tempEvent = calendar.addEvent({
+            title: 'Tu reserva seleccionada',
+            start: adjustedStart,
+            end: adjustedEnd,
+            color: '#28a745',
+            textColor: 'white',
+            extendedProps: { isTemp: true },
+            classNames: ['reserva-temporal']
+        });
+
+        updateFormFields(adjustedStart, adjustedEnd);
+        showSelectionSuccess(adjustedStart, adjustedEnd);
+    }
+
+    function adjustToNearestHour(date) {
+        const adjusted = new Date(date);
+        adjusted.setMinutes(0, 0, 0);
+        return adjusted;
+    }
+
+    function updateFormFields(start, end) {
+        if (fechaInput) fechaInput.value = formatDate(start);
+        if (horaIniInput) horaIniInput.value = formatTime(start);
+        if (horaFinInput) horaFinInput.value = formatTime(end);
+    }
+
+    function showSelectionSuccess(start, end) {
+        const displayDate = document.getElementById('displayDate');
+        const displayStartTime = document.getElementById('displayStartTime');
+        const displayEndTime = document.getElementById('displayEndTime');
+        const displayDuration = document.getElementById('displayDuration');
+
+        if (displayDate) displayDate.textContent = formatDisplayDate(start);
+        if (displayStartTime) displayStartTime.textContent = formatDisplayTime(start);
+        if (displayEndTime) displayEndTime.textContent = formatDisplayTime(end);
+        if (displayDuration) displayDuration.textContent = calculateDuration(start, end);
+
+        if (timeSlotInfo) {
+            timeSlotInfo.innerHTML =
+                `<strong class="text-success">Horario disponible para ${selectedEnvironmentName}:</strong> ` +
+                `${formatDisplayDate(start)} de ${formatDisplayTime(start)} a ${formatDisplayTime(end)}` +
+                `<br><small class="text-success">Duración: ${calculateDuration(start, end)}</small>`;
+            timeSlotInfo.className = 'availability-info selected-slot';
+        }
+
+        if (timeSelectionDisplay) timeSelectionDisplay.style.display = 'block';
+    }
+
+    function updateReservationSummary() {
+        if (!fechaInput || !horaIniInput || !horaFinInput) return;
+
+        const start = new Date(`${fechaInput.value}T${horaIniInput.value}`);
+        const end = new Date(`${fechaInput.value}T${horaFinInput.value}`);
+
+        const summaryEnvironment = document.getElementById('summaryEnvironment');
+        const summaryDate = document.getElementById('summaryDate');
+        const summaryStartTime = document.getElementById('summaryStartTime');
+        const summaryEndTime = document.getElementById('summaryEndTime');
+        const summaryDuration = document.getElementById('summaryDuration');
+
+        if (summaryEnvironment) summaryEnvironment.textContent = selectedEnvironmentName;
+        if (summaryDate) summaryDate.textContent = formatDisplayDate(start);
+        if (summaryStartTime) summaryStartTime.textContent = formatDisplayTime(start);
+        if (summaryEndTime) summaryEndTime.textContent = formatDisplayTime(end);
+        if (summaryDuration) summaryDuration.textContent = calculateDuration(start, end);
+    }
+
+    function validateForm(e) {
+        let isValid = true;
+        let errors = [];
+
+        const requiredFields = document.querySelectorAll('#section3 [required]');
+        requiredFields.forEach(field => {
+            if (!field.value.trim()) {
+                field.style.borderColor = '#dc3545';
+                isValid = false;
+                const fieldName = field.previousElementSibling?.textContent || field.name;
+                errors.push(`${fieldName} es requerido`);
+            } else {
+                field.style.borderColor = '#ced4da';
+            }
+        });
+
+        if (inputPersonas) {
+            const numPersonas = parseInt(inputPersonas.value);
+            const maxCapacidad = parseInt(inputPersonas.getAttribute('max'));
+
+            if (!numPersonas || numPersonas <= 0) {
+                isValid = false;
+                errors.push('El número de personas debe ser mayor a 0');
+                inputPersonas.classList.add('is-invalid');
+            } else if (maxCapacidad && numPersonas > maxCapacidad) {
+                isValid = false;
+                errors.push(`El número de personas (${numPersonas}) excede la capacidad máxima (${maxCapacidad})`);
+                inputPersonas.classList.add('is-invalid');
+            }
+        }
+
+        if (!isValid) {
+            e.preventDefault();
+
+            let mensajeError = 'Por favor, corrija los siguientes errores:\n\n';
+            errors.forEach((error, index) => {
+                mensajeError += `${index + 1}. ${error}\n`;
+            });
+            alert(mensajeError);
+
+            const primerCampoInvalido = document.querySelector('#section3 .is-invalid, #section3 [style*="dc3545"]');
+            if (primerCampoInvalido) {
+                primerCampoInvalido.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                primerCampoInvalido.focus();
+            }
+            return false;
+        }
+
+        return true;
+    }
+
+    function aplicarStepErrorDesdeServidor() {
+        const stepError = "{{ step_error|default:'1' }}";
+        const numPersonasError = "{{ num_personas_error|default_if_none:'' }}";
+
+        if (inputPersonas && numPersonasError) {
+            inputPersonas.value = numPersonasError;
+            validarCapacidad();
+        }
+
+        if (stepError === '3') {
+            const s1 = document.getElementById('section1');
+            const s2 = document.getElementById('section2');
+            const s3 = document.getElementById('section3');
+            const st1 = document.getElementById('step1');
+            const st2 = document.getElementById('step2');
+            const st3 = document.getElementById('step3');
+
+            if (s1) s1.classList.remove('active');
+            if (s2) s2.classList.remove('active');
+            if (s3) s3.classList.add('active');
+
+            if (st1) st1.classList.remove('active');
+            if (st2) st2.classList.add('completed');
+            if (st3) st3.classList.add('active');
+        }
+    }
+
+    function formatDate(date) {
+        return date.toISOString().split('T')[0];
+    }
+
+    function formatTime(date) {
+        return date.toTimeString().slice(0, 5);
+    }
+
+    function formatDisplayDate(date) {
+        return date.toLocaleDateString('es-ES', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    }
+
+    function formatDisplayTime(date) {
+        return date.toLocaleTimeString('es-ES', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+        });
+    }
+
+    function calculateDuration(start, end) {
+        const diff = end - start;
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        return `${hours} hora${hours > 1 ? 's' : ''}`;
+    }
+});
+    </script>
+</body>
+</html>

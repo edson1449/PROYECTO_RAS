@@ -1,0 +1,737 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Funcionario - Sistema R.A.S</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --sena: #2b794d;
+            --sena-dark: #1f5139;
+            --sena-light: #e8f4ed;
+            --sena-lighter: #f0f8f4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --info: #06b6d4;
+            --danger: #ef4444;
+            --gray-50: #fafbfc;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            color: var(--gray-800);
+            min-height: 100vh;
+        }
+
+        
+        .navbar {
+            background: var(--white);
+            padding: 1.2rem 0;
+            border-bottom: 1px solid var(--gray-100);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+
+        .navbar-brand {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--sena) !important;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .navbar-brand img {
+            height: 42px;
+            width: auto;
+            border-radius: 6px;
+        }
+
+        .nav-user-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-info-nav {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--sena) 0%, #3d9a63 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .user-name-nav {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--gray-900);
+        }
+
+        .btn-logout {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-logout:hover {
+            background: #dc2626;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(239, 68, 68, 0.3);
+            color: white;
+        }
+
+        /* ===== HERO SECTION ===== */
+        .hero-section {
+            background: linear-gradient(135deg, var(--sena) 0%, var(--sena-dark) 100%);
+            padding: 4rem 0;
+            position: relative;
+            overflow: hidden;
+            color: white;
+            margin-bottom: 3rem;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-section h1 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            letter-spacing: -1px;
+        }
+
+        .hero-section p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            margin-bottom: 0;
+            font-weight: 300;
+        }
+
+        /* ===== MAIN CONTAINER ===== */
+        .main-container {
+            max-width: 1380px;
+            margin: 0 auto;
+            padding: 0 1.5rem 4rem;
+        }
+
+        /* ===== WELCOME CARD ===== */
+        .welcome-card {
+            background: white;
+            border-radius: 14px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            border: 1px solid var(--gray-100);
+            margin-bottom: 3rem;
+        }
+
+        .welcome-card h2 {
+            font-family: 'Outfit', sans-serif;
+            color: var(--sena-dark);
+            font-weight: 700;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .welcome-card h2 i {
+            color: var(--sena);
+            font-size: 2rem;
+        }
+
+        .welcome-card p {
+            color: var(--gray-700);
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-card .subtitle {
+            color: var(--gray-600);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        /* ===== OPTIONS GRID ===== */
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* ===== OPTION CARD ===== */
+        .option-card {
+            background: white;
+            border-radius: 14px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            border: 1px solid var(--gray-100);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--sena), #3d9a63);
+            transition: all 0.3s ease;
+        }
+
+        .option-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(43, 121, 77, 0.15);
+            border-color: var(--sena-light);
+        }
+
+        .option-card:hover::before {
+            height: 6px;
+        }
+
+        .option-icon {
+            font-size: 3rem;
+            color: var(--sena);
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .option-card h5 {
+            font-family: 'Outfit', sans-serif;
+            color: var(--gray-900);
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            font-size: 1.25rem;
+        }
+
+        .option-card p {
+            color: var(--gray-600);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+
+        .btn-option {
+            background: linear-gradient(135deg, var(--sena), #3d9a63);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            padding: 12px 24px;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 4px 12px rgba(43, 121, 77, 0.15);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn-option:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(43, 121, 77, 0.25);
+            background: linear-gradient(135deg, var(--sena-dark), var(--sena));
+            color: white;
+        }
+
+        /* ===== STATS SECTION ===== */
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 14px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            border: 1px solid var(--gray-100);
+            text-align: center;
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            color: var(--sena);
+            margin-bottom: 1rem;
+        }
+
+        .stat-number {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--gray-600);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer-section {
+            background: var(--sena-lighter);
+            border-top: 1px solid var(--sena-light);
+            padding: 2.5rem 0;
+            margin-top: 4rem;
+            text-align: center;
+            color: var(--sena-dark);
+            font-size: 0.9rem;
+        }
+
+        .footer-section a {
+            color: var(--sena);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--sena-dark);
+            text-decoration: underline;
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .welcome-card,
+        .option-card {
+            animation: slideUp 0.6s ease-out;
+        }
+
+        .option-card:nth-child(1) { animation-delay: 0.1s; }
+        .option-card:nth-child(2) { animation-delay: 0.15s; }
+        .option-card:nth-child(3) { animation-delay: 0.2s; }
+        .option-card:nth-child(4) { animation-delay: 0.25s; }
+        .option-card:nth-child(5) { animation-delay: 0.3s; }
+        .option-card:nth-child(6) { animation-delay: 0.35s; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 3rem 0;
+                margin-bottom: 2rem;
+            }
+
+            .hero-section h1 {
+                font-size: 1.8rem;
+            }
+
+            .hero-section p {
+                font-size: 1rem;
+            }
+
+            .main-container {
+                padding: 0 1rem 2.5rem;
+            }
+
+            .welcome-card {
+                padding: 1.5rem;
+            }
+
+            .welcome-card h2 {
+                font-size: 1.5rem;
+            }
+
+            .options-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .stats-section {
+                grid-template-columns: 1fr;
+            }
+
+            .navbar-brand {
+                font-size: 1.1rem;
+            }
+
+            .navbar-brand img {
+                height: 38px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-section h1 {
+                font-size: 1.4rem;
+            }
+
+            .navbar-brand {
+                font-size: 1rem;
+            }
+
+            .option-card {
+                padding: 1.5rem;
+            }
+
+            .option-icon {
+                font-size: 2.5rem;
+            }
+        }
+   .navbar {
+    background: white;
+    padding: 1rem 0;
+    border-bottom: 1px solid #e5e7eb;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.navbar-brand {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: #2b794d !important;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.navbar-brand img {
+    height: 40px;
+    width: auto;
+}
+
+.navbar-text {
+    color: #1f2937;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #2b794d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+}
+
+.user-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #1f2937;
+}
+
+.user-role {
+    font-size: 0.8rem;
+    color: #6b7280;
+}
+
+.btn-outline-light {
+    background: #ef4444;
+    color: white !important;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-light:hover {
+    background: #dc2626;
+    color: white;
+}
+
+
+.btn-icon{
+    width:40px;
+    height:40px;
+    border-radius:10px;
+    border:none;
+    background:#f3f4f6;
+    color:#1f2937;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition:all .3s ease;
+    position:relative;
+    margin-right:10px;
+}
+
+.btn-icon:hover{
+    background:#2b794d;
+    color:#fff;
+    transform:translateY(-2px);
+}
+
+.notif-badge{
+    position:absolute;
+    top:-6px;
+    right:-6px;
+    min-width:20px;
+    height:20px;
+    padding:0 5px;
+    border-radius:999px;
+    background:#ef4444;
+    color:#fff;
+    font-size:12px;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 0 0 2px #ffffff;
+}
+
+        </style>
+    </head>
+
+    <body>
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'panel_funcionario' %}">
+            <img src="{% static 'logo_ras.jpg' %}" alt="Logo RAS SENA">
+            Sistema R.A.S
+        </a>
+        <div class="navbar-nav ms-auto">
+            <span class="navbar-text">
+                <div class="dropdown">
+                    <button class="btn-icon dropdown-toggle" type="button"
+                    id="dropdownNotifFunc" data-bs-toggle="dropdown"
+                    aria-expanded="false" title="Reservas aprobadas">
+                    <i class="fas fa-bell"></i>
+                    {% if reservas_asignadas_count > 0 %}
+                    <span class="notif-badge">{{ reservas_asignadas_count }}</span>
+                    {% endif %}
+                </button>
+                    <ul class="dropdown-menu dropdown-menu-end"
+                        aria-labelledby="dropdownNotifFunc"
+                        style="width:320px;max-height:400px;overflow-y:auto;">
+                        <li>
+                            <h6 class="dropdown-header">
+                                Reservas Aprobadas ({{ reservas_asignadas_count }})
+                            </h6>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        {% if reservas_asignadas %}
+                            {% for r in reservas_asignadas %}
+                                <li>
+                                    <a class="dropdown-item d-flex flex-column"
+                                       href="{% url 'reservas:listar_reservas' %}">
+                                        <span style="font-size:13px;font-weight:600;">
+                                            {{ r.titulo_reserva }}
+                                        </span>
+                                        <span style="font-size:12px;color:#6b7280;">
+                                            {{ r.cod_ambiente_fk.nom_amb }} · {{ r.fecha }} {{ r.hora_ini }}
+                                        </span>
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                            {% endfor %}
+                        {% else %}
+                            <li>
+                                <span class="dropdown-item-text" style="font-size:13px;color:#9ca3af;">
+                                    No tienes reservas aprobadas
+                                </span>
+                            </li>
+                        {% endif %}
+                        <li>
+                            <a class="dropdown-item text-center"
+                               href="{% url 'reservas:listar_reservas' %}"
+                               style="font-size:13px;font-weight:600;">
+                                Ver todas mis reservas
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div>
+                        <div class="user-name">{{ request.session.user_name }}</div>
+                        <div class="user-role">Funcionario</div>
+                    </div>
+                </div>
+                <a class="btn btn-outline-light btn-sm" href="{% url 'logout' %}">
+                    <i class="fas fa-sign-out-alt"></i> Salir
+                </a>
+            </span>
+        </div>
+    </div>
+</nav>
+
+<div class="hero-section">
+    <div class="hero-content">
+        <div class="container-lg">
+            <h1>Bienvenido, {{ request.session.user_name }}</h1>
+            <p>Gestiona tus reservas de ambientes</p>
+        </div>
+    </div>
+</div>
+
+<div class="main-container">
+    <div class="welcome-card">
+        <h2><i class="fas fa-info-circle"></i> ¿Qué necesitas?</h2>
+        <p>Selecciona una opción para comenzar a trabajar con el sistema de reservas</p>
+        <p class="subtitle"><i class="fas fa-lightbulb"></i> Usa el calendario para ver todas tus reservas.</p>
+    </div>
+
+    <div class="options-grid">
+        <div class="option-card">
+            <div class="option-icon">
+                <i class="fas fa-calendar-plus"></i>
+            </div>
+            <h5>Nueva Reserva</h5>
+            <p>Crea una nueva reserva seleccionando el ambiente, fecha y hora que necesites.</p>
+            <a href="{% url 'reservas:crear_reserva' %}" class="btn btn-option">
+                <i class="fas fa-plus-circle"></i> Crear Reserva
+            </a>
+        </div>
+
+        <div class="option-card">
+            <div class="option-icon">
+                <i class="fas fa-calendar-check"></i>
+            </div>
+            <h5>Mis Reservas</h5>
+            <p>Visualiza todas tus reservas en un calendario interactivo.</p>
+            <a href="{% url 'reservas:listar_reservas' %}" class="btn btn-option">
+                <i class="fas fa-calendar"></i> Ver Calendario
+            </a>
+        </div>
+
+        <div class="option-card">
+            <div class="option-icon">
+                <i class="fas fa-door-open"></i>
+            </div>
+            <h5>Ambientes Disponibles</h5>
+            <p>Consulta todos los ambientes disponibles con sus características y capacidad.</p>
+            <a href="{% url 'ambientes:listar_ambientes_funcionario' %}" class="btn btn-option">
+                <i class="fas fa-building"></i> Ver Ambientes
+            </a>
+        </div>
+
+        <div class="option-card">
+            <div class="option-icon">
+                <i class="fas fa-list"></i>
+            </div>
+            <h5>Vista en Tabla</h5>
+            <p>Visualiza tus reservas en formato de tabla con filtros y búsqueda.</p>
+            <a href="{% url 'reservas:listar_reservas_tabla' %}" class="btn btn-option">
+                <i class="fas fa-table"></i> Ver Tabla
+            </a>
+        </div>
+
+        <div class="option-card">
+            <div class="option-icon">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <h5>Mi Perfil</h5>
+            <p>Actualiza tu información personal y contraseña.</p>
+            <a href="{% url 'perfil' %}" class="btn btn-option">
+                <i class="fas fa-edit"></i> Editar Perfil
+            </a>
+        </div>
+
+        <div class="option-card">
+            <div class="option-icon">
+                <i class="fas fa-headset"></i>
+            </div>
+            <h5>Soporte Técnico</h5>
+            <p>Contacta con el equipo de soporte técnico para resolver cualquier problema.</p>
+            <a href="{% url 'soporte:listar_mis_soportes' %}" class="btn btn-option">
+                <i class="fas fa-envelope"></i> Contactar
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="footer-section">
+    <p>© 2025 Sistema R.A.S - SENA</p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

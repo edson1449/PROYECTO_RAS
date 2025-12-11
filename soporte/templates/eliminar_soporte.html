@@ -1,0 +1,528 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eliminar Soporte - SENA</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --sena: #2b794d;
+            --sena-dark: #1f5139;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --gray-50: #fafbfc;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            color: var(--gray-800);
+            min-height: 100vh;
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            background: white;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--gray-100);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+
+        .navbar-brand {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--sena) !important;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .navbar-brand img {
+            height: 42px;
+            width: auto;
+            border-radius: 6px;
+        }
+
+        .user-badge {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 16px;
+            background: #f0f8f4;
+            border-radius: 12px;
+            border: 1px solid #e8f4ed;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--sena) 0%, #3d9a63 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--gray-900);
+        }
+
+        .user-role {
+            font-size: 0.75rem;
+            color: var(--sena);
+            font-weight: 500;
+        }
+
+        .btn-logout {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-logout:hover {
+            background: #dc2626;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(239, 68, 68, 0.3);
+            color: white;
+        }
+
+        /* ===== PAGE CONTAINER ===== */
+        .page-wrapper {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+
+        .page-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1.5rem;
+        }
+
+        /* ===== MAIN CARD ===== */
+        .delete-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--gray-100);
+            width: 100%;
+            max-width: 550px;
+            overflow: hidden;
+        }
+
+        /* ===== CARD HEADER ===== */
+        .card-header-delete {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            padding: 1.2rem 2rem;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .card-header-delete h2 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 1.5rem;
+            margin: 0;
+            letter-spacing: -0.5px;
+        }
+
+        /* ===== CARD BODY ===== */
+        .card-body-delete {
+            padding: 2rem;
+        }
+
+        /* ===== CONFIRMATION MESSAGE ===== */
+        .confirmation-message {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--gray-800);
+            font-size: 1rem;
+            font-weight: 500;
+            line-height: 1.6;
+        }
+
+        /* ===== DETAILS SECTION ===== */
+        .details-box {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, rgba(220, 38, 38, 0.03) 100%);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 2px solid #fecaca;
+        }
+
+        .details-box h5 {
+            color: var(--gray-900);
+            font-weight: 700;
+            font-family: 'Outfit', sans-serif;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.05rem;
+        }
+
+        .details-box h5 i {
+            color: var(--danger);
+        }
+
+        .details-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(239, 68, 68, 0.15);
+        }
+
+        .detail-item:last-child {
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: var(--gray-700);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .detail-label i {
+            color: var(--danger);
+            width: 18px;
+        }
+
+        .detail-value {
+            color: var(--gray-900);
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+
+        .status-abierto {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-en_proceso {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-cerrado {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .priority-alta {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .priority-media {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .priority-baja {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        /* ===== ACTION BUTTONS ===== */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            padding: 0.8rem 2rem;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-cancel-delete {
+            background: var(--gray-100);
+            color: var(--gray-800);
+            border: 2px solid var(--gray-300);
+        }
+
+        .btn-cancel-delete:hover {
+            background: var(--gray-200);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            color: var(--gray-900);
+        }
+
+        .btn-delete-now {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-delete-now:hover {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+            color: white;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .page-content {
+                padding: 1.5rem 1rem;
+            }
+
+            .card-header-delete {
+                padding: 1rem 1.5rem;
+            }
+
+            .card-body-delete {
+                padding: 1.5rem;
+            }
+
+            .card-header-delete h2 {
+                font-size: 1.3rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn-action {
+                width: 100%;
+            }
+
+            .detail-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .detail-value {
+                text-align: left;
+                margin-top: 0.5rem;
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .card-header-delete {
+                padding: 0.9rem 1rem;
+            }
+
+            .card-body-delete {
+                padding: 1.25rem;
+            }
+
+            .card-header-delete h2 {
+                font-size: 1.1rem;
+            }
+
+            .confirmation-message {
+                font-size: 0.9rem;
+            }
+
+            .details-box {
+                padding: 1rem;
+            }
+
+            .detail-label {
+                font-size: 0.85rem;
+            }
+
+            .btn-action {
+                padding: 0.7rem 1.5rem;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'soporte:listar_soportes' %}">
+                <img src="{% static 'logo_ras.jpg' %}" alt="Logo RAS SENA">
+                <span>Sistema R.A.S</span>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav ms-auto" style="gap: 1rem; display: flex; align-items: center;">
+                    <div class="user-badge" style="margin-right: 15px;">
+                        <div class="user-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="user-info">
+                            <div class="user-name">{{ request.session.user_name }}</div>
+                            <div class="user-role">
+                                {% if request.session.user_tipo == 'admin' %}
+                                    Administrador
+                                {% else %}
+                                    Funcionario
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <a class="btn btn-logout" href="{% url 'logout' %}">
+                        <i class="fas fa-sign-out-alt"></i> Salir
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- PAGE WRAPPER -->
+    <div class="page-wrapper">
+        <div class="page-content">
+            <div class="delete-card">
+                <!-- HEADER -->
+                <div class="card-header-delete">
+                    <h2>Confirmar Eliminación</h2>
+                </div>
+
+                <!-- BODY -->
+                <div class="card-body-delete">
+                    <!-- CONFIRMATION MESSAGE -->
+                    <div class="confirmation-message">
+                        <p>¿Está seguro que desea eliminar este soporte? Esta acción no se puede deshacer.</p>
+                    </div>
+
+                    <!-- DETAILS -->
+                    <div class="details-box">
+                        <h5><i class="fas fa-info-circle"></i> Información del Soporte</h5>
+                        
+                        <div class="details-list">
+                            <div class="detail-item">
+                                <span class="detail-label"><i class="fas fa-hashtag"></i> ID</span>
+                                <span class="detail-value">{{ soporte.id }}</span>
+                            </div>
+
+                            <div class="detail-item">
+                                <span class="detail-label"><i class="fas fa-heading"></i> Asunto</span>
+                                <span class="detail-value">{{ soporte.asunto }}</span>
+                            </div>
+
+                            <div class="detail-item">
+                                <span class="detail-label"><i class="fas fa-user"></i> Usuario</span>
+                                <span class="detail-value">{{ soporte.usuario }}</span>
+                            </div>
+
+                            <div class="detail-item">
+                                <span class="detail-label"><i class="fas fa-flag"></i> Prioridad</span>
+                                <span class="detail-value">
+                                    {% if soporte.prioridad == 'alta' %}
+                                        <span class="status-badge priority-alta">
+                                            <i class="fas fa-exclamation-circle"></i> Alta
+                                        </span>
+                                    {% elif soporte.prioridad == 'media' %}
+                                        <span class="status-badge priority-media">
+                                            <i class="fas fa-exclamation"></i> Media
+                                        </span>
+                                    {% else %}
+                                        <span class="status-badge priority-baja">
+                                            <i class="fas fa-check-circle"></i> Baja
+                                        </span>
+                                    {% endif %}
+                                </span>
+                            </div>
+
+                            <div class="detail-item">
+                                <span class="detail-label"><i class="fas fa-info-circle"></i> Estado</span>
+                                <span class="detail-value">
+                                    {% if soporte.estado == 'abierto' %}
+                                        <span class="status-badge status-abierto">
+                                            <i class="fas fa-door-open"></i> Abierto
+                                        </span>
+                                    {% elif soporte.estado == 'en_proceso' %}
+                                        <span class="status-badge status-en_proceso">
+                                            <i class="fas fa-spinner"></i> En Proceso
+                                        </span>
+                                    {% else %}
+                                        <span class="status-badge status-cerrado">
+                                            <i class="fas fa-check"></i> Cerrado
+                                        </span>
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ACTIONS -->
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="action-buttons">
+                            <a href="{% url 'soporte:listar_soportes' %}" class="btn-action btn-cancel-delete">
+                                <i class="fas fa-arrow-left"></i> Cancelar
+                            </a>
+                            <button type="submit" class="btn-action btn-delete-now" onclick="return confirm('¿Está seguro? Esta acción no se puede deshacer.')">
+                                <i class="fas fa-trash"></i> Eliminar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,565 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Usuarios - Sistema R.A.S</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), 
+                        url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1500&q=80') center/cover fixed;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            background: linear-gradient(135deg, #1d5a3d 0%, #2d7a4d 100%);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+            margin-bottom: 40px;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 18px;
+            color: white !important;
+        }
+
+        .navbar-brand img {
+            height: 45px;
+            width: auto;
+            border-radius: 8px;
+        }
+
+        .navbar-text {
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .btn-logout {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .btn-logout:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+            color: white;
+        }
+
+        /* CONTENIDO */
+        .container-lg {
+            max-width: 1200px;
+        }
+
+        .page-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .page-header h1 {
+            color: #1d5a3d;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 28px;
+        }
+
+        .page-header h1 i {
+            color: #2d7a4d;
+        }
+
+        .page-header p {
+            color: #666;
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .btn-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            border-radius: 8px;
+            font-weight: 600;
+            padding: 11px 24px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-upload {
+            background: linear-gradient(135deg, #1d5a3d 0%, #2d7a4d 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(45, 122, 77, 0.15);
+        }
+
+        .btn-upload:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(45, 122, 77, 0.25);
+            color: white;
+        }
+
+        .btn-back {
+            background: rgba(45, 122, 77, 0.08);
+            border: 1.5px solid #2d7a4d;
+            color: #2d7a4d;
+        }
+
+        .btn-back:hover {
+            background: rgba(45, 122, 77, 0.12);
+            transform: translateY(-2px);
+            color: #2d7a4d;
+        }
+
+        .search-box {
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            border: 1.5px solid #ddd;
+            border-radius: 8px;
+            padding: 11px 14px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            border-color: #2d7a4d;
+            box-shadow: 0 0 0 0.2rem rgba(45, 122, 77, 0.08);
+            outline: none;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .table {
+            font-size: 13px;
+            margin-bottom: 0;
+        }
+
+        .table thead th {
+            background: linear-gradient(135deg, #1d5a3d 0%, #2d7a4d 100%);
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 15px;
+            text-align: left;
+        }
+
+        .table tbody td {
+            vertical-align: middle;
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            color: #333;
+        }
+
+        .table tbody tr:hover {
+            background: rgba(29, 90, 61, 0.03);
+        }
+
+        .table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .badge {
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .badge-admin {
+            background: #dc3545;
+            color: white;
+        }
+
+        .badge-funcionario {
+            background: #2d7a4d;
+            color: white;
+        }
+
+        .text-truncate-cell {
+            max-width: 300px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .empty-state i {
+            font-size: 64px;
+            color: #ddd;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .empty-state h3 {
+            color: #999;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            color: #bbb;
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(29, 90, 61, 0.05), rgba(45, 122, 77, 0.05));
+            border: 1.5px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2d7a4d;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .alert {
+            border: none;
+            border-radius: 8px;
+            border-left: 4px solid;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .alert-success {
+            background: rgba(40, 167, 69, 0.08);
+            color: #155724;
+            border-left-color: #28a745;
+        }
+
+        .alert-error {
+            background: rgba(220, 53, 69, 0.08);
+            color: #721c24;
+            border-left-color: #dc3545;
+        }
+
+        .alert-warning {
+            background: rgba(255, 193, 7, 0.08);
+            color: #856404;
+            border-left-color: #ffc107;
+        }
+
+        .footer-section {
+            background: rgba(29, 90, 61, 0.05);
+            border-top: 1px solid rgba(29, 90, 61, 0.1);
+            padding: 30px 0;
+            margin-top: 50px;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 15px;
+            }
+
+            .page-card {
+                padding: 25px;
+            }
+
+            .page-header h1 {
+                font-size: 22px;
+            }
+
+            .btn-actions {
+                flex-direction: column;
+            }
+
+            .btn-action {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .table {
+                font-size: 12px;
+            }
+
+            .table thead th,
+            .table tbody td {
+                padding: 10px;
+            }
+
+            .text-truncate-cell {
+                max-width: 150px;
+            }
+
+            .stats-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-card {
+            animation: slideUp 0.6s ease-out;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-lg">
+            <a class="navbar-brand" href="{% url 'panel_admin' %}">
+                <img src="{% static 'logo_ras.jpg' %}" alt="Logo SENA R.A.S">
+                <span>Sistema R.A.S</span>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center gap-3">
+                    <li class="nav-item">
+                        <span class="navbar-text">
+                            <i class="fas fa-user-circle" style="color: #66ea9f;"></i>
+                            {{ request.session.user_name }}
+                        </span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-logout btn-sm" href="{% url 'logout' %}">
+                            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CONTENIDO -->
+    <div class="container-lg">
+        <div class="page-card">
+            <!-- HEADER -->
+            <div class="page-header">
+                <h1>
+                    <i class="fas fa-users"></i> Gestión de Usuarios
+                </h1>
+                <p>Administra y visualiza todos los usuarios del sistema</p>
+            </div>
+
+            <!-- MENSAJES -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <!-- BOTONES DE ACCIÓN -->
+            <div class="btn-actions">
+                <a href="{% url 'carga_masiva' %}" class="btn-action btn-upload">
+                    <i class="fas fa-file-upload"></i> Cargar Usuarios (CSV/Excel)
+                </a>
+                <a href="{% url 'panel_admin' %}" class="btn-action btn-back">
+                    <i class="fas fa-arrow-left"></i> Volver al Panel
+                </a>
+            </div>
+
+            <!-- ESTADÍSTICAS -->
+            {% if usuarios %}
+                <div class="stats-row">
+                    <div class="stat-card">
+                        <div class="stat-number">{{ usuarios|length }}</div>
+                        <div class="stat-label">Total de Usuarios</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">{{ admin_count }}</div>
+                        <div class="stat-label">Administradores</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">{{ funcionario_count }}</div>
+                        <div class="stat-label">Funcionarios</div>
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- BÚSQUEDA -->
+            <div class="search-box">
+                <input 
+                    type="text" 
+                    class="form-control" 
+                    id="searchInput" 
+                    placeholder="Buscar por documento, nombre o email..."
+                />
+            </div>
+
+            <!-- TABLA -->
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Documento</th>
+                            <th>Nombre</th>
+                            <th>Email</th>
+                            <th>Teléfono</th>
+                            <th>Tipo</th>
+                            <th>Centro</th>
+                            <th>Coordinación</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usuariosTable">
+                        {% if usuarios %}
+                            {% for usuario in usuarios %}
+                                <tr class="usuario-row">
+                                    <td><strong>{{ usuario.id }}</strong></td>
+                                    <td>{{ usuario.nombre }}</td>
+                                    <td class="text-truncate-cell">{{ usuario.email }}</td>
+                                    <td>{{ usuario.telefono|default:"N/A" }}</td>
+                                    <td>
+                                        {% if usuario.tipo == 'admin' %}
+                                            <span class="badge badge-admin">
+                                                <i class="fas fa-crown"></i> Admin
+                                            </span>
+                                        {% else %}
+                                            <span class="badge badge-funcionario">
+                                                <i class="fas fa-user-tie"></i> Funcionario
+                                            </span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-truncate-cell">
+                                        {% if usuario.cod_centro_fk %}
+                                            {{ usuario.cod_centro_fk.nom_centro|truncatewords:3 }}
+                                        {% else %}
+                                            <span style="color: #999;">N/A</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-truncate-cell">
+                                        {% if usuario.cod_coordinacion_fk %}
+                                            {{ usuario.cod_coordinacion_fk.nom_coordinacion|truncatewords:3 }}
+                                        {% else %}
+                                            <span style="color: #999;">N/A</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="7" class="p-0">
+                                    <div class="empty-state">
+                                        <i class="fas fa-inbox"></i>
+                                        <h3>No hay usuarios registrados</h3>
+                                        <p>Carga usuarios usando el botón "Cargar Usuarios (CSV/Excel)"</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer-section">
+        <p>© 2025 Sistema R.A.S - SENA | Sistema de Reservas de Ambientes</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Búsqueda en tiempo real
+        document.getElementById('searchInput').addEventListener('keyup', function(e) {
+            const searchValue = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('.usuario-row');
+            
+            rows.forEach(row => {
+                const texto = row.textContent.toLowerCase();
+                if (texto.includes(searchValue)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+
+        // Cerrar alertas automáticamente
+        document.querySelectorAll('.alert').forEach(alert => {
+            setTimeout(() => {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }, 5000);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,494 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Centro | Sistema R.A.S - SENA</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --sena: #2b794d;
+            --sena-dark: #1f5139;
+            --sena-light: #e8f4ed;
+            --sena-lighter: #f0f8f4;
+            --danger: #ef4444;
+            --gray-50: #fafbfc;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #eef2ff 100%);
+            color: var(--gray-800);
+            min-height: 100vh;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            background: white;
+            padding: 1.2rem 0;
+            border-bottom: 1px solid var(--gray-100);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+
+        .navbar-brand {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--sena) !important;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .navbar-brand img {
+            height: 42px;
+            width: auto;
+            border-radius: 6px;
+        }
+
+        .nav-user-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-badge {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 16px;
+            background: var(--sena-lighter);
+            border-radius: 12px;
+            border: 1px solid var(--sena-light);
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--sena) 0%, #3d9a63 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--gray-900);
+        }
+
+        .user-role {
+            font-size: 0.75rem;
+            color: var(--sena);
+            font-weight: 500;
+        }
+
+        .btn-logout {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-logout:hover {
+            background: #dc2626;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(239, 68, 68, 0.3);
+            color: white;
+        }
+
+        /* MAIN CONTAINER */
+        .main-container {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 4rem 1.5rem 5rem;
+        }
+
+        /* CARD */
+        .card {
+            border-radius: 16px;
+            background: white;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.12);
+        }
+
+        /* CARD HEADER */
+        .card-header {
+            background: linear-gradient(135deg, var(--sena) 0%, #3d9a63 50%, var(--sena-dark) 100%);
+            color: white;
+            text-align: center;
+            padding: 2.5rem 2rem;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255,255,255,0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .card-header h4 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            font-size: 1.6rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            position: relative;
+            z-index: 1;
+            letter-spacing: -0.5px;
+        }
+
+        .card-header h4 i {
+            font-size: 1.8rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .card-header small {
+            font-size: 0.95rem;
+            opacity: 0.92;
+            position: relative;
+            z-index: 1;
+            font-weight: 300;
+        }
+
+        .card-body {
+            padding: 2.5rem;
+        }
+
+        /* FORMULARIO */
+        .form-group {
+            margin-bottom: 1.8rem;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        label {
+            font-weight: 700;
+            color: var(--gray-800);
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        label i {
+            color: var(--sena);
+            font-size: 1rem;
+            background: var(--sena-lighter);
+            padding: 6px 8px;
+            border-radius: 6px;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="file"],
+        select,
+        textarea {
+            border-radius: 12px !important;
+            padding: 0.95rem 1.1rem !important;
+            border: 1.5px solid var(--gray-200) !important;
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            background: white;
+            transition: all 0.3s ease !important;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        input[type="file"]:focus,
+        select:focus,
+        textarea:focus {
+            box-shadow: 0 0 0 3px rgba(43, 121, 77, 0.1), 0 4px 16px rgba(43, 121, 77, 0.15) !important;
+            border-color: var(--sena) !important;
+            outline: none !important;
+            transform: translateY(-2px);
+        }
+
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%232b794d' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            padding-right: 2.8rem !important;
+        }
+
+        textarea {
+            min-height: 120px !important;
+            resize: vertical;
+            font-size: 0.95rem;
+        }
+
+        .form-text {
+            font-size: 0.82rem;
+            color: var(--gray-600);
+            margin-top: 0.5rem;
+            display: block;
+            font-weight: 500;
+            line-height: 1.5;
+        }
+
+        /* BUTTONS GROUP */
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2.5rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--gray-100);
+        }
+
+        .btn {
+            border-radius: 12px;
+            font-weight: 700;
+            padding: 12px 28px;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            flex: 1;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--sena) 0%, #3d9a63 100%);
+            color: white;
+            box-shadow: 0 6px 20px rgba(43, 121, 77, 0.25);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(43, 121, 77, 0.35);
+            color: white;
+        }
+
+        .btn-primary:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--gray-200);
+            color: var(--gray-800);
+            border: 1.5px solid var(--gray-300);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-300);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+            color: var(--gray-900);
+        }
+
+        .text-danger {
+            color: var(--danger);
+            font-size: 0.82rem;
+            margin-top: 0.4rem;
+            font-weight: 600;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 2rem 1rem 3rem;
+            }
+
+            .card-body {
+                padding: 1.8rem;
+            }
+
+            .card-header {
+                padding: 2rem 1.5rem;
+            }
+
+            .card-header h4 {
+                font-size: 1.3rem;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar-brand {
+                font-size: 1rem;
+            }
+
+            .navbar-brand span {
+                display: none;
+            }
+
+            .user-name {
+                font-size: 0.8rem;
+            }
+
+            .card-header h4 {
+                font-size: 1.1rem;
+                gap: 8px;
+            }
+
+            .card-header h4 i {
+                font-size: 1.4rem;
+            }
+
+            label {
+                font-size: 0.85rem;
+            }
+
+            .btn {
+                padding: 10px 16px;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="{% if request.session.user_tipo == 'admin' %}{% url 'panel_admin' %}{% else %}{% url 'panel_funcionario' %}{% endif %}">
+                <img src="{% static 'logo_ras.jpg' %}" alt="Logo RAS SENA">
+                <span>Sistema R.A.S</span>
+            </a>
+
+            <div class="nav-user-section ms-auto">
+                <div class="user-badge">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div>
+                        <div class="user-name">{{ request.session.user_name }}</div>
+                        <div class="user-role">
+                            {% if request.session.user_tipo == 'admin' %}Administrador{% else %}Funcionario{% endif %}
+                        </div>
+                    </div>
+                </div>
+                <a class="btn btn-logout" href="{% url 'logout' %}">
+                    <i class="fas fa-sign-out-alt"></i> Salir
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTAINER -->
+    <div class="main-container">
+        <div class="card">
+            <div class="card-header">
+                <h4>
+                     Editar Centro
+                </h4>
+                <small>Código: {{ centro.cod_centro }}</small>
+            </div>
+
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    {% for field in form %}
+                    <div class="form-group">
+                        <label for="{{ field.id_for_label }}">
+                            <i class="fas fa-tag"></i> {{ field.label }}
+                        </label>
+                        {{ field }}
+                        {% if field.errors %}
+                        <div class="text-danger">{{ field.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+
+                    <!-- CIUDAD -->
+                    <div class="form-group">
+                        <label>
+                            <i class="fas fa-map-marker-alt"></i> Ciudad
+                        </label>
+                        <input type="text" class="form-control" value="Bogotá" readonly>
+                        <small class="form-text">Ciudad fija para este centro</small>
+                    </div>
+
+                    <!-- BOTONES -->
+                    <div class="button-group">
+                        <a href="{% url 'centros:listar_centros' %}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                             Actualizar Centro
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

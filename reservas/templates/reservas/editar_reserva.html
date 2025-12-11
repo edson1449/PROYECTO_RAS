@@ -1,0 +1,1202 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Reserva - SENA</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --sena: #2b794d;
+            --sena-dark: #1f5139;
+            --sena-light: #e8f4ed;
+            --sena-lighter: #f0f8f4;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #06b6d4;
+            --gray-50: #fafbfc;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            color: var(--gray-800);
+            min-height: 100vh;
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            background: white;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--gray-100);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+
+        .navbar-brand {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--sena) !important;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .navbar-brand img {
+            height: 42px;
+            width: auto;
+            border-radius: 6px;
+        }
+
+        .user-badge {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 16px;
+            background: var(--sena-lighter);
+            border-radius: 12px;
+            border: 1px solid var(--sena-light);
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--sena) 0%, #3d9a63 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--gray-900);
+        }
+
+        .user-role {
+            font-size: 0.75rem;
+            color: var(--sena);
+            font-weight: 500;
+        }
+
+        .btn-logout {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-logout:hover {
+            background: #dc2626;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(239, 68, 68, 0.3);
+            color: white;
+        }
+
+        /* ===== PAGE HEADER ===== */
+        .page-header {
+            background: linear-gradient(135deg, var(--sena) 0%, #1f5139 100%);
+            padding: 3rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+
+        .page-header-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            color: white;
+        }
+
+        .page-header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 2.4rem;
+            margin-bottom: 0;
+            letter-spacing: -0.5px;
+        }
+
+        /* ===== MAIN CONTAINER ===== */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem 4rem;
+        }
+
+        /* ===== FORM SECTIONS ===== */
+        .form-section {
+            background: var(--gray-50);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.03);
+            border: 1px solid var(--gray-100);
+        }
+
+        .form-section h5 {
+            color: var(--sena-dark);
+            border-bottom: 2px solid var(--sena);
+            padding-bottom: 0.75rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+        }
+
+        .form-section h5 i {
+            color: var(--sena);
+        }
+
+        label {
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        input, select, textarea {
+            border-radius: 10px !important;
+            padding: 0.7rem !important;
+            border: 1.5px solid var(--gray-200) !important;
+            transition: all 0.3s ease !important;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            box-shadow: 0 0 0 3px rgba(43, 121, 77, 0.08) !important;
+            border-color: var(--sena) !important;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            border-radius: 10px;
+            font-weight: 600;
+            padding: 11px 26px;
+            transition: all 0.3s ease;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--sena) 0%, #3d9a63 100%);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #1f5139 0%, var(--sena) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(43, 121, 77, 0.25);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--gray-200);
+            color: var(--gray-700);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-300);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+            color: var(--gray-900);
+        }
+
+        /* ===== CALENDAR ===== */
+        #calendar {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .fc-toolbar {
+            background: linear-gradient(135deg, var(--sena), var(--sena-dark));
+            color: white;
+            padding: 15px;
+            margin: 0 !important;
+            border: none;
+        }
+
+        .fc-toolbar-title {
+            font-weight: 700;
+            color: white;
+            font-size: 1.4rem;
+        }
+
+        .fc-button {
+            background-color: white !important;
+            color: var(--sena) !important;
+            border: none !important;
+            border-radius: 8px !important;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .fc-button:hover:not(.fc-button-active) {
+            background-color: #f3f4f6 !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .fc-button-active {
+            background-color: var(--sena) !important;
+            color: white !important;
+        }
+
+        .fc-timegrid-slot {
+            height: 40px !important;
+        }
+
+        .fc-event {
+            cursor: pointer;
+            border-radius: 6px;
+            font-size: 0.85em;
+            transition: all 0.2s ease;
+        }
+
+        .fc-event:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transform: translateY(-1px);
+        }
+
+        .fc-day-today {
+            background-color: rgba(43, 121, 77, 0.08) !important;
+        }
+
+        /* ===== STEP INDICATOR ===== */
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--gray-200);
+            color: var(--gray-600);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .step-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: center;
+            color: var(--gray-700);
+        }
+
+        .step.active .step-number {
+            background-color: var(--sena);
+            color: white;
+            box-shadow: 0 4px 12px rgba(43, 121, 77, 0.3);
+        }
+
+        .step.completed .step-number {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .step-section {
+            display: none;
+        }
+
+        .step-section.active {
+            display: block;
+        }
+
+        /* ===== DISPLAY BOXES ===== */
+        .selected-time-display {
+            background: linear-gradient(135deg, var(--sena), var(--sena-dark));
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 4px 12px rgba(43, 121, 77, 0.15);
+        }
+
+        .environment-badge {
+            background: var(--sena-lighter);
+            color: var(--sena-dark);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            display: inline-block;
+            border: 1px solid var(--sena-light);
+        }
+
+        /* ===== AVAILABILITY INFO ===== */
+        .availability-info {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid;
+        }
+
+        .conflict-warning {
+            background-color: #fef2f2;
+            border-left-color: var(--danger);
+            color: #991b1b;
+        }
+
+        .selected-slot {
+            background-color: #f0fdf4;
+            border-left-color: #28a745;
+            color: #166534;
+        }
+
+        .info-slot {
+            background-color: var(--sena-lighter);
+            border-left-color: var(--sena);
+            color: var(--gray-800);
+        }
+
+        /* ===== ALERTS ===== */
+        .alert {
+            border: none;
+            border-radius: 12px;
+            border-left: 4px solid;
+            padding: 1rem 1.25rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            margin-bottom: 1.5rem;
+        }
+
+        .alert-info {
+            background: #eff6ff;
+            color: #1e40af;
+            border-left-color: #06b6d4;
+        }
+
+        .alert-warning {
+            background: #fefce8;
+            color: #854d0e;
+            border-left-color: #f59e0b;
+        }
+
+        /* ===== RESERVA INFO ===== */
+        .reserva-info {
+            background: #eff6ff;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border-left: 4px solid #06b6d4;
+        }
+
+        .reserva-info h5 {
+            color: #1e40af;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        /* ===== UTILITIES ===== */
+        .d-flex.justify-content-between {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .badge {
+            padding: 0.35em 0.65em;
+            border-radius: 0.25rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .bg-primary {
+            background-color: var(--info) !important;
+            color: white;
+        }
+
+        .form-text {
+            display: block;
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--gray-600);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 1.5rem 1rem 2.5rem;
+            }
+
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .d-flex.justify-content-between {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            #calendar {
+                height: 400px;
+            }
+
+            .form-section {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-header h1 {
+                font-size: 1.4rem;
+            }
+
+            .navbar-brand {
+                font-size: 1rem;
+            }
+
+            .main-container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="{% if request.session.user_tipo == 'admin' %}{% url 'panel_admin' %}{% else %}{% url 'panel_funcionario' %}{% endif %}">
+                <img src="{% static 'logo_ras.jpg' %}" alt="Logo RAS SENA">
+                <span>Sistema R.A.S</span>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav ms-auto" style="gap: 1rem; display: flex; align-items: center;">
+                    <div class="user-badge" style="margin-right: 15px;">
+                        <div class="user-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div>
+                            <div class="user-name">{{ request.session.user_name }}</div>
+                            <div class="user-role">
+                                {% if request.session.user_tipo == 'admin' %}
+                                    Administrador
+                                {% else %}
+                                    Funcionario
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <a class="btn btn-logout" href="{% url 'logout' %}">
+                        <i class="fas fa-sign-out-alt"></i> Salir
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+        <div class="page-header-content">
+            <h1>
+                <i class="fas fa-edit me-2"></i>Editar Reserva
+            </h1>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-container">
+        {% if messages %}
+        <div id="msg-container">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            {% endfor %}
+        </div>
+        <script>
+            setTimeout(function() {
+                document.querySelectorAll('#msg-container .alert').forEach(alert => {
+                    new bootstrap.Alert(alert).close();
+                });
+            }, 4000);
+        </script>
+        {% endif %}
+
+        <div class="reserva-info">
+            <h5><i class="fas fa-info-circle me-2"></i>Información Actual de la Reserva</h5>
+            <div class="row">
+                <div class="col-md-4 mb-2">
+                    <strong>Código:</strong> {{ reserva.cod_reserva }}
+                </div>
+                <div class="col-md-4 mb-2">
+                    <strong>Título:</strong> {{ reserva.titulo_reserva }}
+                </div>
+                <div class="col-md-4 mb-2">
+                    <strong>Tipo:</strong> {{ reserva.get_tipo_reserva_display }}
+                </div>
+                <div class="col-md-4 mb-2">
+                    <strong>Estado:</strong> 
+                    <span class="badge {% if reserva.estado == 'aprobada' %}bg-success{% elif reserva.estado == 'pendiente' %}bg-warning{% elif reserva.estado == 'rechazada' %}bg-danger{% else %}bg-secondary{% endif %}">
+                        {{ reserva.get_estado_display }}
+                    </span>
+                </div>
+                <div class="col-md-4 mb-2">
+                    <strong>Fecha:</strong> {{ reserva.fecha }}
+                </div>
+                <div class="col-md-4 mb-2">
+                    <strong>Hora:</strong> {{ reserva.hora_ini }} - {{ reserva.hora_fin }}
+                </div>
+                <div class="col-md-4 mb-2">
+                    <strong>Ambiente:</strong> {{ reserva.cod_ambiente_fk.nom_amb }}
+                </div>
+                <div class="col-md-4 mb-2">
+                    <strong>Personas:</strong> {{ reserva.num_personas }}
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP INDICATOR -->
+        <div class="step-indicator">
+            <div class="step active" id="step1">
+                <div class="step-number">1</div>
+                <div class="step-label">Seleccionar Ambiente</div>
+            </div>
+            <div class="step" id="step2">
+                <div class="step-number">2</div>
+                <div class="step-label">Fecha y Hora</div>
+            </div>
+            <div class="step" id="step3">
+                <div class="step-number">3</div>
+                <div class="step-label">Detalles</div>
+            </div>
+        </div>
+
+        <!-- FORM -->
+        <form method="post" id="reservationForm">
+            {% csrf_token %}
+
+            <!-- STEP 1: ENVIRONMENT SELECTION -->
+            <div class="step-section active" id="section1">
+                <div class="form-section">
+                    <h5><i class="fas fa-door-open me-2"></i>Selección de Ambiente</h5>
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <label class="form-label">Ambiente</label>
+                            <select class="form-select" id="id_ambiente" name="cod_ambiente_fk" required>
+                                <option value="">Seleccione un ambiente disponible</option>
+                                {% for ambiente in ambientes %}
+                                <option value="{{ ambiente.cod_amb }}" {% if reserva.cod_ambiente_fk.cod_amb == ambiente.cod_amb %}selected{% endif %}>
+                                    {{ ambiente.nom_amb }}
+                                </option>
+                                {% endfor %}
+                            </select>
+
+                            <div class="availability-info info-slot mt-3" id="availabilityInfo">
+                                <strong><i class="fas fa-info-circle me-2"></i>Instrucciones:</strong>
+                                Seleccione un ambiente disponible para ver sus horarios
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a href="{% if request.session.user_tipo == 'admin' %}{% url 'panel_admin' %}{% else %}{% url 'reservas:listar_reservas' %}{% endif %}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-1"></i>
+                        {% if request.session.user_tipo == 'admin' %}
+                            Volver al Panel Admin
+                        {% else %}
+                            Volver a mis Reservas
+                        {% endif %}
+                    </a>
+
+                    <button type="button" class="btn btn-success" id="nextToStep2">
+                        Siguiente <i class="fas fa-arrow-right ms-1"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 2: DATE & TIME SELECTION -->
+            <div class="step-section" id="section2">
+                <div class="form-section">
+                    <h5><i class="fas fa-calendar-alt me-2"></i>Fecha y Hora</h5>
+
+                    <div class="mb-3">
+                        <label class="form-label">Ambiente seleccionado:</label>
+                        <div class="environment-badge" id="selectedEnvironment">
+                            <i class="fas fa-door-open me-2"></i>
+                            {{ reserva.cod_ambiente_fk.nom_amb }}
+                        </div>
+                    </div>
+
+                    <div id="calendar"></div>
+
+                    <div class="selected-time-display" id="timeSelectionDisplay" style="display: none;">
+                        <div class="row text-center">
+                            <div class="col-md-3">
+                                <strong>Fecha:</strong><br>
+                                <span id="displayDate">-</span>
+                            </div>
+                            <div class="col-md-3">
+                                <strong>Hora Inicio:</strong><br>
+                                <span id="displayStartTime">-</span>
+                            </div>
+                            <div class="col-md-3">
+                                <strong>Hora Fin:</strong><br>
+                                <span id="displayEndTime">-</span>
+                            </div>
+                            <div class="col-md-3">
+                                <strong>Duración:</strong><br>
+                                <span id="displayDuration">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mt-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Fecha</label>
+                            <input type="date" class="form-control" id="id_fecha" name="fecha" 
+                                   value="{{ reserva.fecha|date:'Y-m-d' }}" required readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Hora Inicio</label>
+                            <input type="time" class="form-control" id="id_hora_ini" name="hora_ini" 
+                                   value="{{ reserva.hora_ini|time:'H:i' }}" required readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Hora Fin</label>
+                            <input type="time" class="form-control" id="id_hora_fin" name="hora_fin" 
+                                   value="{{ reserva.hora_fin|time:'H:i' }}" required readonly>
+                        </div>
+                    </div>
+
+                    <div class="availability-info info-slot mt-3" id="timeSlotInfo">
+                        <strong><i class="fas fa-info-circle me-2"></i>Instrucciones:</strong>
+                        Haga clic y arrastre en el calendario para seleccionar el nuevo horario deseado. 
+                        Los horarios en rojo ya están reservados. La reserva actual se muestra en azul.
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <button type="button" class="btn btn-secondary" id="backToStep1">
+                        <i class="fas fa-arrow-left me-1"></i> Anterior
+                    </button>
+                    <button type="button" class="btn btn-success" id="nextToStep3">
+                        Siguiente <i class="fas fa-arrow-right ms-1"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 3: DETAILS -->
+            <div class="step-section" id="section3">
+                {% if es_administrador %}
+                <div class="form-section">
+                    <h5><i class="fas fa-user-shield me-2"></i>Información del Funcionario</h5>
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Reserva asignada a:</strong> {{ reserva.cod_usuario_fk.nombre }}
+                    </div>
+                </div>
+                {% else %}
+                <div class="form-section">
+                    <h5><i class="fas fa-user me-2"></i>Información del Solicitante</h5>
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Reserva personal:</strong> Esta reserva está asignada a su usuario.
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <strong>Nombre:</strong> {{ request.session.user_name }}
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Rol:</strong> <span class="badge bg-primary">Funcionario</span>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="form-section">
+                    <h5><i class="fas fa-info-circle me-2"></i>Información Básica</h5>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Título de la Reserva</label>
+                            <input type="text" class="form-control" id="id_titulo_reserva" name="titulo_reserva"
+                                   value="{{ reserva.titulo_reserva }}" placeholder="Ingrese el título" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Tipo de Reserva</label>
+                            <select class="form-select" id="id_tipo_reserva" name="tipo_reserva" required>
+                                <option value="">Seleccione el tipo</option>
+                                <option value="reunion" {% if reserva.tipo_reserva == 'reunion' %}selected{% endif %}>Reunión</option>
+                                <option value="estudio" {% if reserva.tipo_reserva == 'estudio' %}selected{% endif %}>Estudio</option>
+                                <option value="evento" {% if reserva.tipo_reserva == 'evento' %}selected{% endif %}>Evento</option>
+                                <option value="presentacion" {% if reserva.tipo_reserva == 'presentacion' %}selected{% endif %}>Presentación</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label">Estado de la Reserva</label>
+                            {% if es_administrador %}
+                            <select class="form-select" id="id_estado" name="estado" required>
+                                <option value="pendiente" {% if reserva.estado == 'pendiente' %}selected{% endif %}>Pendiente</option>
+                                <option value="aprobada" {% if reserva.estado == 'aprobada' %}selected{% endif %}>Aprobada</option>
+                                <option value="rechazada" {% if reserva.estado == 'rechazada' %}selected{% endif %}>Rechazada</option>
+                            </select>
+                            {% else %}
+                            <div class="alert alert-warning">
+                                <i class="fas fa-clock me-2"></i><strong>{{ reserva.get_estado_display }}</strong>
+                                <small class="d-block mt-1">Solo los administradores pueden cambiar el estado</small>
+                            </div>
+                            <input type="hidden" name="estado" value="{{ reserva.estado }}">
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h5><i class="fas fa-users me-2"></i>Detalles de la Reserva</h5>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Número de Personas</label>
+                            <input type="number" class="form-control" id="id_num_personas" name="num_personas"
+                                   value="{{ reserva.num_personas }}" min="1" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Ambiente</label>
+                            <div class="environment-badge" id="finalEnvironment">
+                                <i class="fas fa-door-open me-2"></i> {{ reserva.cod_ambiente_fk.nom_amb }}
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Motivo</label>
+                            <textarea class="form-control" id="id_motivo" name="motivo" rows="4"
+                                      placeholder="Ingrese el motivo de la reserva" required>{{ reserva.motivo }}</textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section selected-slot">
+                    <h5><i class="fas fa-calendar-check me-2"></i>Resumen de la Reserva</h5>
+                    <div class="row">
+                        <div class="col-md-6 mb-2"><strong>Ambiente:</strong> <span id="summaryEnvironment">{{ reserva.cod_ambiente_fk.nom_amb }}</span></div>
+                        <div class="col-md-6 mb-2"><strong>Fecha:</strong> <span id="summaryDate">{{ reserva.fecha }}</span></div>
+                        <div class="col-md-6 mb-2"><strong>Hora Inicio:</strong> <span id="summaryStartTime">{{ reserva.hora_ini }}</span></div>
+                        <div class="col-md-6 mb-2"><strong>Hora Fin:</strong> <span id="summaryEndTime">{{ reserva.hora_fin }}</span></div>
+                        <div class="col-md-12 mb-2">
+                            <strong>Duración:</strong> <span id="summaryDuration">
+                                {% with duration=reserva.duracion %}
+                                    {{ duration }} hora{{ duration|pluralize }}
+                                {% endwith %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a href="{% url 'reservas:listar_reservas' %}" class="btn btn-secondary">
+                        <i class="fas fa-times me-1"></i> Cancelar
+                    </a>
+                    <button type="submit" class="btn btn-success" id="submitReservation">
+                        <i class="fas fa-check me-1"></i> Actualizar Reserva
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales/es.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+  const environmentSelect = document.getElementById('id_ambiente');
+  const selectedEnvironment = document.getElementById('selectedEnvironment');
+  const finalEnvironment = document.getElementById('finalEnvironment');
+  const timeSelectionDisplay = document.getElementById('timeSelectionDisplay');
+  const timeSlotInfo = document.getElementById('timeSlotInfo');
+  const fechaInput = document.getElementById('id_fecha');
+  const horaIniInput = document.getElementById('id_hora_ini');
+  const horaFinInput = document.getElementById('id_hora_fin');
+  const estadoSelect = document.getElementById('id_estado');
+
+  let calendar;
+  let selectedEnvironmentId = "{{ reserva.cod_ambiente_fk.cod_amb }}";
+  let selectedEnvironmentName = "{{ reserva.cod_ambiente_fk.nom_amb }}";
+  let tempEvent = null;
+  let existingReservations = [];
+
+  const rolUsuario = "{{ request.session.user_tipo }}";
+  const esAdministrador = rolUsuario === 'admin';
+
+  const currentReserva = {
+    id: "{{ reserva.cod_reserva }}",
+    ambiente: "{{ reserva.cod_ambiente_fk.nom_amb }}",
+    ambiente_id: "{{ reserva.cod_ambiente_fk.cod_amb }}",
+    fecha: "{{ reserva.fecha|date:'Y-m-d' }}",
+    hora_ini: "{{ reserva.hora_ini|time:'H:i' }}",
+    hora_fin: "{{ reserva.hora_fin|time:'H:i' }}",
+    titulo_reserva: "{{ reserva.titulo_reserva }}",
+    estado: "{{ reserva.estado }}"
+  };
+
+  initializeCalendar();
+  setupEventListeners();
+  setInitialState();
+  initializeWithCurrentData();
+
+  function setInitialState() {
+    const estadoActual = "{{ reserva.estado|lower }}";
+    if (estadoSelect) {
+      estadoSelect.value = estadoActual;
+    }
+  }
+
+  function initializeCalendar() {
+    const calendarEl = document.getElementById('calendar');
+    calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'timeGridWeek',
+      locale: 'es',
+      headerToolbar: { left: 'prev,next today', center: 'title', right: 'timeGridWeek,timeGridDay' },
+      slotMinTime: '06:00:00',
+      slotMaxTime: '22:00:00',
+      slotDuration: '01:00:00',
+      allDaySlot: false,
+      weekends: false,
+      selectable: true,
+      selectMirror: true,
+      selectOverlap: false,
+      navLinks: true,
+      businessHours: { daysOfWeek: [1, 2, 3, 4, 5], startTime: '07:00', endTime: '20:00' },
+      select: function(info) { handleDateSelection(info); },
+      events: function(fetchInfo, successCallback, failureCallback) { getEventsForEnvironment(fetchInfo, successCallback, failureCallback); },
+      selectAllow: function(selectInfo) { return isTimeSlotAvailable(selectInfo.start, selectInfo.end); },
+      validRange: { start: new Date() },
+      slotLabelFormat: { hour: '2-digit', minute: '2-digit', hour12: false },
+      eventTimeFormat: { hour: '2-digit', minute: '2-digit', hour12: false },
+      selectMinDistance: 60,
+      snapDuration: '01:00:00',
+      selectLongPressDelay: 0,
+      unselectAuto: false,
+      eventDisplay: 'block',
+      eventColor: '#dc3545',
+      eventTextColor: 'white'
+    });
+    calendar.render();
+    loadExistingReservations(selectedEnvironmentId);
+  }
+
+  function setupEventListeners() {
+    const nextToStep2 = document.getElementById('nextToStep2');
+    const nextToStep3 = document.getElementById('nextToStep3');
+    const backToStep1 = document.getElementById('backToStep1');
+    const reservationForm = document.getElementById('reservationForm');
+
+    if (nextToStep2) nextToStep2.addEventListener('click', function(e) { e.preventDefault(); goToStep2(); });
+    if (nextToStep3) nextToStep3.addEventListener('click', function(e) { e.preventDefault(); goToStep3(); });
+    if (backToStep1) backToStep1.addEventListener('click', function(e) { e.preventDefault(); volverPaso2a1(); });
+    if (reservationForm) reservationForm.addEventListener('submit', validateForm);
+
+    if (environmentSelect) {
+      environmentSelect.addEventListener('change', function() {
+        if (this.value) {
+          selectedEnvironmentId = this.value;
+          const selectedOption = this.options[this.selectedIndex];
+          selectedEnvironmentName = selectedOption.text;
+          loadExistingReservations(this.value);
+        }
+      });
+    }
+  }
+
+  function volverPaso2a1() {
+    changeStep(2, 1);
+    timeSelectionDisplay.style.display = 'none';
+    if (tempEvent) {
+      tempEvent.remove();
+      tempEvent = null;
+    }
+  }
+
+  function goToStep2() {
+    if (!environmentSelect || !environmentSelect.value) { alert('Por favor, seleccione un ambiente.'); return; }
+    const selectedOption = environmentSelect.options[environmentSelect.selectedIndex];
+    if (selectedEnvironment) selectedEnvironment.textContent = selectedOption.text;
+    if (finalEnvironment) finalEnvironment.textContent = selectedOption.text;
+    selectedEnvironmentId = environmentSelect.value;
+    selectedEnvironmentName = selectedOption.text;
+    loadExistingReservations(selectedEnvironmentId);
+    changeStep(1, 2);
+  }
+
+  function goToStep3() {
+    if (!fechaInput || !horaIniInput || !horaFinInput) return;
+    if (!fechaInput.value || !horaIniInput.value || !horaFinInput.value) { alert('Por favor, seleccione fecha y hora.'); return; }
+    updateReservationSummary();
+    changeStep(2, 3);
+  }
+
+  function changeStep(from, to) {
+    const sectionFrom = document.getElementById(`section${from}`);
+    const stepFrom = document.getElementById(`step${from}`);
+    const sectionTo = document.getElementById(`section${to}`);
+    const stepTo = document.getElementById(`step${to}`);
+    if (sectionFrom) sectionFrom.classList.remove('active');
+    if (stepFrom) stepFrom.classList.remove('active');
+    if (sectionTo) sectionTo.classList.add('active');
+    if (stepTo) stepTo.classList.add('active');
+    if (to > from && stepFrom) stepFrom.classList.add('completed');
+  }
+
+  function loadExistingReservations(ambienteId) {
+    timeSlotInfo.innerHTML = `<strong>Cargando reservas...</strong>`;
+    fetch('/reservas/api/reservas/')
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          existingReservations = data.reservas.filter(r => r.estado !== 'rechazada');
+          if (calendar) calendar.refetchEvents();
+          updateAvailabilityInfo();
+          timeSlotInfo.innerHTML = `<strong class="text-success">Reservas cargadas</strong>`;
+        } else {
+          throw new Error(data.error);
+        }
+      })
+      .catch(error => {
+        timeSlotInfo.innerHTML = `<strong class="text-danger">Error cargando reservas</strong>`;
+        existingReservations = [];
+      });
+  }
+
+  function getEventsForEnvironment(fetchInfo, successCallback, failureCallback) {
+    const events = [];
+    existingReservations
+      .filter(reserva => reserva.estado !== 'rechazada')
+      .forEach(reserva => {
+        const startDateTime = `${reserva.fecha}T${reserva.hora_ini}`;
+        const endDateTime = `${reserva.fecha}T${reserva.hora_fin}`;
+
+        let color = '#dc3545';
+        let title = `${reserva.ambiente}: ${reserva.titulo_reserva}`;
+        if (reserva.estado === 'pendiente') { color = '#ffc107'; }
+        else if (reserva.estado === 'aprobada') { color = '#28a745'; }
+
+        if (rolUsuario === 'admin') title += ` (${reserva.usuario})`;
+
+        if (reserva.cod_reserva && reserva.cod_reserva == currentReserva.id) {
+          color = '#007bff';
+          title = `[Actual] ${title}`;
+        }
+
+        events.push({
+          title: title,
+          start: startDateTime,
+          end: endDateTime,
+          color: color,
+          textColor: 'white',
+          display: 'block'
+        });
+      });
+    successCallback(events);
+  }
+
+  function updateAvailabilityInfo() {
+    const totalReservas = existingReservations.length;
+    const hoy = new Date().toISOString().split('T')[0];
+    const reservasHoy = existingReservations.filter(r => r.fecha === hoy).length;
+
+    timeSlotInfo.innerHTML = `
+      <strong class="text-info">Disponibilidad:</strong>
+      <br><small>• Total de reservas: ${totalReservas}</small>
+      <br><small>• Reservas hoy: ${reservasHoy}</small>
+      <br><small>• La reserva actual se muestra en azul</small>
+    `;
+    timeSlotInfo.className = 'availability-info info-slot';
+  }
+
+  function isTimeSlotAvailable(start, end) {
+    const now = new Date();
+    if (start < now) { showTemporaryMessage('No puede seleccionar horarios en el pasado.', 'error'); return false; }
+    const duration = (end - start) / (1000 * 60);
+    if (duration < 60) { showTemporaryMessage('Mínimo 1 hora.', 'error'); return false; }
+    if (duration > 240) { showTemporaryMessage('Máximo 4 horas.', 'error'); return false; }
+    const startMinutes = start.getMinutes();
+    const endMinutes = end.getMinutes();
+    if (startMinutes !== 0 || endMinutes !== 0) { showTemporaryMessage('Debe seleccionar horas completas.', 'error'); return false; }
+    if (checkTimeConflict(start, end)) { showTemporaryMessage('Horario no disponible.', 'error'); return false; }
+    return true;
+  }
+
+  function showTemporaryMessage(message, type = 'info') {
+    const originalContent = timeSlotInfo.innerHTML;
+    const originalClass = timeSlotInfo.className;
+    timeSlotInfo.innerHTML = `<strong class="text-${type === 'error' ? 'danger' : 'info'}">${message}</strong>`;
+    timeSlotInfo.className = `availability-info ${type === 'error' ? 'conflict-warning' : 'info-slot'}`;
+    setTimeout(() => { timeSlotInfo.innerHTML = originalContent; timeSlotInfo.className = originalClass; }, 3000);
+  }
+
+  function checkTimeConflict(start, end) {
+    if (!selectedEnvironmentId) return true;
+    const selectedOption = environmentSelect.options[environmentSelect.selectedIndex];
+    const ambienteSeleccionado = selectedOption.text;
+
+    return existingReservations.some(reserva => {
+      if (reserva.cod_reserva && reserva.cod_reserva == currentReserva.id) return false;
+      if (reserva.ambiente !== ambienteSeleccionado) return false;
+      if (reserva.estado === 'rechazada') return false;
+      const reservaStart = new Date(`${reserva.fecha}T${reserva.hora_ini}`);
+      const reservaEnd = new Date(`${reserva.fecha}T${reserva.hora_fin}`);
+      return (start < reservaEnd && end > reservaStart);
+    });
+  }
+
+  function handleDateSelection(selectionInfo) {
+    const start = selectionInfo.start;
+    const end = selectionInfo.end;
+    const adjustedStart = adjustToNearestHour(start);
+    const adjustedEnd = adjustToNearestHour(end);
+    if ((adjustedEnd - adjustedStart) / (1000 * 60 * 60) < 1) adjustedEnd.setTime(adjustedStart.getTime() + 60 * 60 * 1000);
+    if (tempEvent) tempEvent.remove();
+    if (!isTimeSlotAvailable(adjustedStart, adjustedEnd)) return;
+    tempEvent = calendar.addEvent({
+      title: 'Tu nueva selección',
+      start: adjustedStart,
+      end: adjustedEnd,
+      color: '#28a745',
+      textColor: 'white'
+    });
+    updateFormFields(adjustedStart, adjustedEnd);
+    showSelectionSuccess(adjustedStart, adjustedEnd);
+  }
+
+  function adjustToNearestHour(date) {
+    const adjusted = new Date(date);
+    adjusted.setMinutes(0, 0, 0);
+    return adjusted;
+  }
+
+  function updateFormFields(start, end) {
+    fechaInput.value = formatDate(start);
+    horaIniInput.value = formatTime(start);
+    horaFinInput.value = formatTime(end);
+  }
+
+  function showSelectionSuccess(start, end) {
+    const selectedOption = environmentSelect.options[environmentSelect.selectedIndex];
+    const ambienteNombre = selectedOption.text;
+
+    document.getElementById('displayDate').textContent = formatDisplayDate(start);
+    document.getElementById('displayStartTime').textContent = formatDisplayTime(start);
+    document.getElementById('displayEndTime').textContent = formatDisplayTime(end);
+    document.getElementById('displayDuration').textContent = calculateDuration(start, end);
+
+    timeSlotInfo.innerHTML = `
+      <strong class="text-success">Horario disponible para ${ambienteNombre}:</strong> 
+      ${formatDisplayDate(start)} de ${formatDisplayTime(start)} a ${formatDisplayTime(end)}
+      <br><small class="text-success">Duración: ${calculateDuration(start, end)}</small>
+    `;
+    timeSlotInfo.className = 'availability-info selected-slot';
+    timeSelectionDisplay.style.display = 'block';
+  }
+
+  function updateReservationSummary() {
+    const selectedOption = environmentSelect.options[environmentSelect.selectedIndex];
+    const start = new Date(`${fechaInput.value}T${horaIniInput.value}`);
+    const end = new Date(`${fechaInput.value}T${horaFinInput.value}`);
+
+    document.getElementById('summaryEnvironment').textContent = selectedOption.text;
+    document.getElementById('summaryDate').textContent = formatDisplayDate(start);
+    document.getElementById('summaryStartTime').textContent = formatDisplayTime(start);
+    document.getElementById('summaryEndTime').textContent = formatDisplayTime(end);
+    document.getElementById('summaryDuration').textContent = calculateDuration(start, end);
+  }
+
+  function validateForm(e) {
+    let isValid = true;
+    const requiredFields = document.querySelectorAll('#section3 [required]');
+    requiredFields.forEach(field => {
+      if (!field.value.trim()) {
+        field.style.borderColor = '#dc3545';
+        isValid = false;
+      } else {
+        field.style.borderColor = '#ced4da';
+      }
+    });
+
+    if (!isValid) {
+      e.preventDefault();
+      alert('Por favor, complete todos los campos requeridos.');
+      return false;
+    }
+    return true;
+  }
+
+  function formatDate(date) { return date.toISOString().split('T')[0]; }
+  function formatTime(date) { return date.toTimeString().slice(0, 5); }
+  function formatDisplayDate(date) { return date.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }); }
+  function formatDisplayTime(date) { return date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', hour12: false }); }
+  function calculateDuration(start, end) { const diff = end - start; const hours = Math.floor(diff / (1000 * 60 * 60)); return `${hours} hora${hours > 1 ? 's' : ''}`; }
+
+  function initializeWithCurrentData() {
+    const start = new Date(`${currentReserva.fecha}T${currentReserva.hora_ini}`);
+    const end = new Date(`${currentReserva.fecha}T${currentReserva.hora_fin}`);
+    updateFormFields(start, end);
+    updateReservationSummary();
+  }
+});
+    </script>
+
+</body>
+</html>

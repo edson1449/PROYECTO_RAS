@@ -1,0 +1,796 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil - Sistema R.A.S</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --sena: #2b794d;
+            --sena-dark: #1f5139;
+            --sena-light: #e8f4ed;
+            --sena-lighter: #f0f8f4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --info: #06b6d4;
+            --danger: #ef4444;
+            --gray-50: #fafbfc;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            color: var(--gray-800);
+            min-height: 100vh;
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            background: var(--white);
+            padding: 1.2rem 0;
+            border-bottom: 1px solid var(--gray-100);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+
+        .navbar-brand {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--sena) !important;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .navbar-brand img {
+            height: 42px;
+            width: auto;
+            border-radius: 6px;
+        }
+
+        .nav-user-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-badge {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 16px;
+            background: var(--sena-lighter);
+            border-radius: 12px;
+            border: 1px solid var(--sena-light);
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--sena) 0%, #3d9a63 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--gray-900);
+        }
+
+        .btn-logout {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-logout:hover {
+            background: #dc2626;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(239, 68, 68, 0.3);
+            color: white;
+        }
+
+        /* ===== PAGE HEADER ===== */
+        .page-header {
+            background: linear-gradient(135deg, var(--sena) 0%, #1f5139 100%);
+            padding: 3.5rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+
+        .page-header-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            color: white;
+        }
+
+        .page-header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 2.8rem;
+            margin: 0 0 0.8rem 0;
+            letter-spacing: -1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .page-header p {
+            font-size: 1.05rem;
+            opacity: 0.92;
+            margin: 0;
+            font-weight: 300;
+            letter-spacing: 0.3px;
+        }
+
+        /* ===== MAIN CONTAINER ===== */
+        .main-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem 4rem;
+        }
+
+        /* ===== PERFIL CARD ===== */
+        .perfil-card {
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            border: 1px solid var(--gray-100);
+            overflow: hidden;
+        }
+
+        .perfil-header {
+            background: linear-gradient(135deg, var(--sena), var(--sena-dark));
+            padding: 2.5rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .perfil-avatar-large {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5rem;
+            flex-shrink: 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .perfil-header-info h1 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .perfil-header-info p {
+            font-size: 0.95rem;
+            opacity: 0.95;
+            margin-bottom: 4px;
+        }
+
+        .perfil-badge {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: inline-block;
+            margin-top: 0.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .perfil-body {
+            padding: 2.5rem;
+        }
+
+        /* ===== FORM SECTION ===== */
+        .form-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .form-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-family: 'Outfit', sans-serif;
+            color: var(--gray-900);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--sena);
+        }
+
+        .section-title i {
+            color: var(--sena);
+            font-size: 1.3rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-row.full {
+            grid-template-columns: 1fr;
+        }
+
+        .form-group {
+            margin-bottom: 0;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-label i {
+            color: var(--sena);
+            width: 18px;
+            font-size: 0.9rem;
+        }
+
+        .form-control,
+        .form-select {
+            border-radius: 10px;
+            border: 1.5px solid var(--gray-200);
+            padding: 11px 14px;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            background: var(--gray-50);
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: var(--sena);
+            box-shadow: 0 0 0 3px rgba(43, 121, 77, 0.08);
+            outline: none;
+            background: white;
+        }
+
+        /* ===== ALERTS ===== */
+        .alert {
+            border: none;
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            margin-bottom: 1.5rem;
+            border-left: 4px solid;
+        }
+
+        .alert-danger {
+            background: #fef2f2;
+            color: #7f1d1d;
+            border-left-color: var(--danger);
+        }
+
+        .alert-success {
+            background: #f0fdf4;
+            color: #166534;
+            border-left-color: var(--success);
+        }
+
+        .text-danger {
+            font-size: 0.85rem;
+            color: var(--danger);
+            margin-top: 6px;
+            display: block;
+        }
+
+        /* ===== HELPER TEXT ===== */
+        .helper-text {
+            color: var(--gray-600);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            padding: 0.75rem 1rem;
+            background: var(--sena-lighter);
+            border-radius: 8px;
+            border-left: 3px solid var(--sena);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .helper-text i {
+            color: var(--sena);
+            flex-shrink: 0;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn-container {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .btn {
+            border-radius: 10px;
+            font-weight: 600;
+            padding: 12px 28px;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .btn-save {
+            background: linear-gradient(135deg, var(--sena) 0%, #3d9a63 100%);
+            color: white;
+        }
+
+        .btn-save:hover {
+            background: linear-gradient(135deg, #1f5139 0%, var(--sena) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(43, 121, 77, 0.25);
+            color: white;
+        }
+
+        .btn-back {
+            background: var(--gray-200);
+            color: var(--gray-700);
+        }
+
+        .btn-back:hover {
+            background: var(--gray-300);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+            color: var(--gray-900);
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .perfil-card {
+            animation: slideUp 0.6s ease-out;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .main-container {
+                padding: 1.5rem 1rem 2.5rem;
+            }
+
+            .perfil-header {
+                flex-direction: column;
+                text-align: center;
+                padding: 1.5rem;
+            }
+
+            .perfil-avatar-large {
+                width: 80px;
+                height: 80px;
+                font-size: 2rem;
+            }
+
+            .perfil-body {
+                padding: 1.5rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .btn-container {
+                flex-direction: column;
+            }
+
+            .btn-container .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-header h1 {
+                font-size: 1.4rem;
+            }
+
+            .navbar-brand {
+                font-size: 1rem;
+            }
+
+            .section-title {
+                font-size: 1rem;
+            }
+
+            .perfil-header-info h1 {
+                font-size: 1.3rem;
+            }
+        }
+   .navbar {
+    background: white;
+    padding: 1rem 0;
+    border-bottom: 1px solid #e5e7eb;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.navbar-brand {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: #2b794d !important;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.navbar-brand img {
+    height: 40px;
+    width: auto;
+}
+
+.navbar-text {
+    color: #1f2937;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #2b794d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+}
+
+.user-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #1f2937;
+}
+
+.user-role {
+    font-size: 0.8rem;
+    color: #6b7280;
+}
+
+.btn-outline-light {
+    background: #ef4444;
+    color: white !important;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-light:hover {
+    background: #dc2626;
+    color: white;
+}
+        </style>
+    </head>
+
+    <body>
+        
+       <nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'panel_admin' %}">
+            <img src="{% static 'logo_ras.jpg' %}" alt="Logo RAS SENA">
+            Sistema R.A.S
+        </a>
+        <div class="navbar-nav ms-auto">
+            <span class="navbar-text">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div>
+                        <div class="user-name">{{ request.session.user_name }}</div>
+                        <div class="user-role">
+                            {% if request.session.user_tipo == 'admin' %}Administrador{% else %}Funcionario{% endif %}
+                        </div>
+                    </div>
+                </div>
+                <a class="btn btn-outline-light btn-sm" href="{% url 'logout' %}">
+                    <i class="fas fa-sign-out-alt"></i> Salir
+                </a>
+            </span>
+        </div>
+    </div>
+</nav>
+    
+    <div class="page-header">
+        <div class="page-header-content">
+            <h1><i class="fas fa-user-circle"></i> Mi Perfil</h1>
+            <p>Administra tu información personal y seguridad</p>
+        </div>
+    </div>
+
+ 
+    <div class="main-container">
+        <div class="perfil-card">
+            <div class="perfil-header">
+                <div class="perfil-avatar-large">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="perfil-header-info">
+                    <h1>{{ usuario.nombre }}</h1>
+                    <p><i class="fas fa-id-card me-2" style="color: rgba(255,255,255,0.7);"></i><strong>Documento:</strong> {{ usuario.id }}</p>
+                    <p><i class="fas fa-envelope me-2" style="color: rgba(255,255,255,0.7);"></i><strong>Email:</strong> {{ usuario.email }}</p>
+                    <span class="perfil-badge">
+                        <i class="fas fa-user-tie me-1"></i>
+                        {% if usuario.tipo == 'admin' %}
+                            Administrador
+                        {% else %}
+                            Funcionario
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+
+            
+            <div class="perfil-body">
+                
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            <i class="fas fa-check-circle me-2"></i>
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <form method="post" novalidate>
+                    {% csrf_token %}
+
+                    
+                    <div class="form-section">
+                        <div class="section-title">
+                            <i class="fas fa-phone"></i> Información de Contacto
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-envelope"></i> Correo Electrónico
+                                </label>
+                                {{ form.email }}
+                                {% if form.email.errors %}
+                                    <span class="text-danger"><i class="fas fa-exclamation-circle me-1"></i>{{ form.email.errors }}</span>
+                                {% endif %}
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-phone"></i> Teléfono
+                                </label>
+                                {{ form.telefono }}
+                                {% if form.telefono.errors %}
+                                    <span class="text-danger"><i class="fas fa-exclamation-circle me-1"></i>{{ form.telefono.errors }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                   
+                    <div class="form-section">
+                        <div class="section-title">
+                            <i class="fas fa-building"></i> Información Institucional
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-building"></i> Centro
+                                </label>
+                                {{ form.cod_centro_fk }}
+                                {% if form.cod_centro_fk.errors %}
+                                    <span class="text-danger"><i class="fas fa-exclamation-circle me-1"></i>{{ form.cod_centro_fk.errors }}</span>
+                                {% endif %}
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-sitemap"></i> Coordinación
+                                </label>
+                                {{ form.cod_coordinacion_fk }}
+                                {% if form.cod_coordinacion_fk.errors %}
+                                    <span class="text-danger"><i class="fas fa-exclamation-circle me-1"></i>{{ form.cod_coordinacion_fk.errors }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                    <div class="form-section">
+                        <div class="section-title">
+                            <i class="fas fa-lock"></i> Cambiar Contraseña
+                        </div>
+                        
+                        <div class="helper-text">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Completa los campos si deseas cambiar tu contraseña</span>
+                        </div>
+
+                        <div class="form-row full">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-lock"></i> Contraseña Actual
+                                </label>
+                                {{ form.password_actual }}
+                                {% if form.password_actual.errors %}
+                                    <span class="text-danger"><i class="fas fa-exclamation-circle me-1"></i>{{ form.password_actual.errors }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-key"></i> Contraseña Nueva
+                                </label>
+                                {{ form.password_nueva }}
+                                {% if form.password_nueva.errors %}
+                                    <span class="text-danger"><i class="fas fa-exclamation-circle me-1"></i>{{ form.password_nueva.errors }}</span>
+                                {% endif %}
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-key"></i> Confirmar Contraseña
+                                </label>
+                                {{ form.password_confirm }}
+                                {% if form.password_confirm.errors %}
+                                    <span class="text-danger"><i class="fas fa-exclamation-circle me-1"></i>{{ form.password_confirm.errors }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+
+                    
+
+                    <div class="actions-bar">
+                        <button type="submit" class="btn btn-save">
+                            <i class="fas fa-save"></i> Guardar Cambios
+                        </button>
+                        <button type="button" class="btn btn-secondary" id="btnVolver">
+                            <i class="fas fa-arrow-left"></i> 
+                            {% if rol_usuario == 'admin' %}
+                            Volver al Panel
+                            {% else %}
+                            Volver
+                            {% endif %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+
+        const rolUsuario = "{{ rol_usuario|escapejs }}";
+
+    document.getElementById('btnVolver').addEventListener('click', function() {
+        if (rolUsuario === 'admin') {
+            window.location.href = "{% url 'panel_admin' %}";
+        } else {
+            window.location.href = "{% url 'panel_funcionario' %}";
+        }
+    });
+
+
+        setTimeout(function() {
+            let alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                let bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            });
+        }, 5000);
+
+
+    </script>
+</body>
+</html>

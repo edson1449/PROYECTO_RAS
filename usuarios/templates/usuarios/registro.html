@@ -1,0 +1,416 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Usuario - Sistema R.A.S</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), 
+                        url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1500&q=80') center/cover fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+        }
+
+        .register-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            padding: 50px;
+            width: 100%;
+            max-width: 700px;
+            animation: slideUp 0.6s ease-out;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .register-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .register-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1d5a3d;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .register-header i {
+            font-size: 32px;
+            background: linear-gradient(135deg, #1d5a3d 0%, #2d7a4d 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .register-header p {
+            color: #666;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-row.full {
+            grid-template-columns: 1fr;
+        }
+
+        .form-group {
+            margin: 0;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-label i {
+            color: #2d7a4d;
+            width: 18px;
+            text-align: center;
+        }
+
+        .form-control, .form-select {
+            border: 1.5px solid #ddd;
+            border-radius: 8px;
+            padding: 11px 14px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #2d7a4d;
+            box-shadow: 0 0 0 0.2rem rgba(45, 122, 77, 0.08);
+            outline: none;
+            background: white;
+        }
+
+        .form-control::placeholder, .form-select::placeholder {
+            color: #999;
+        }
+
+        .btn-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #1d5a3d 0%, #2d7a4d 100%);
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            font-weight: 600;
+            color: white;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(45, 122, 77, 0.15);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(45, 122, 77, 0.25);
+        }
+
+        .btn-back {
+            background: rgba(45, 122, 77, 0.08);
+            border: 1.5px solid #2d7a4d;
+            border-radius: 8px;
+            padding: 12px;
+            font-weight: 600;
+            color: #2d7a4d;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .btn-back:hover {
+            background: rgba(45, 122, 77, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .alert {
+            border: none;
+            border-radius: 8px;
+            margin-bottom: 18px;
+            border-left: 4px solid;
+            font-size: 14px;
+        }
+
+        .alert-danger {
+            background: rgba(220, 53, 69, 0.08);
+            color: #721c24;
+            border-left-color: #dc3545;
+        }
+
+        .alert-success {
+            background: rgba(40, 167, 69, 0.08);
+            color: #155724;
+            border-left-color: #28a745;
+        }
+
+        .text-danger {
+            font-size: 12px;
+            color: #dc3545;
+            margin-top: 4px;
+        }
+
+        .footer-text {
+            text-align: center;
+            margin-top: 25px;
+            color: #999;
+            font-size: 13px;
+        }
+
+        .footer-text a {
+            color: #2d7a4d;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .footer-text a:hover {
+            color: #1d5a3d;
+            text-decoration: underline;
+        }
+
+        .section-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #2d7a4d;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .register-container {
+                padding: 35px 25px;
+            }
+
+            .register-header h1 {
+                font-size: 24px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .btn-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="register-container">
+        <div class="register-header">
+            <h1><i class="fas fa-user-plus"></i> Registro</h1>
+            <p>Complete el formulario para crear su cuenta</p>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post" novalidate>
+            {% csrf_token %}
+
+            <!-- SECCIÓN: INFORMACIÓN PERSONAL -->
+            <div class="section-title">
+                <i class="fas fa-user"></i> Información Personal
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="id_numero_documento" class="form-label">
+                        <i class="fas fa-id-card"></i> Documento
+                    </label>
+                    {{ form.numero_documento }}
+                    {% if form.numero_documento.errors %}
+                        <div class="text-danger">{{ form.numero_documento.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_telefono" class="form-label">
+                        <i class="fas fa-phone"></i> Teléfono
+                    </label>
+                    {{ form.telefono }}
+                    {% if form.telefono.errors %}
+                        <div class="text-danger">{{ form.telefono.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-row full">
+                <div class="form-group">
+                    <label for="id_nombre" class="form-label">
+                        <i class="fas fa-user"></i> Nombres Completos
+                    </label>
+                    {{ form.nombre }}
+                    {% if form.nombre.errors %}
+                        <div class="text-danger">{{ form.nombre.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- SECCIÓN: INFORMACIÓN INSTITUCIONAL -->
+            <div class="section-title" style="margin-top: 30px;">
+                <i class="fas fa-building"></i> Información Institucional
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="id_cod_centro_fk" class="form-label">
+                        <i class="fas fa-building"></i> Centro
+                    </label>
+                    {{ form.cod_centro_fk }}
+                    {% if form.cod_centro_fk.errors %}
+                        <div class="text-danger">{{ form.cod_centro_fk.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_cod_coordinacion_fk" class="form-label">
+                        <i class="fas fa-sitemap"></i> Coordinación
+                    </label>
+                    {{ form.cod_coordinacion_fk }}
+                    {% if form.cod_coordinacion_fk.errors %}
+                        <div class="text-danger">{{ form.cod_coordinacion_fk.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- SECCIÓN: INFORMACIÓN DE CONTACTO -->
+            <div class="section-title" style="margin-top: 30px;">
+                <i class="fas fa-envelope"></i> Información de Contacto
+            </div>
+
+            <div class="form-row full">
+                <div class="form-group">
+                    <label for="id_email" class="form-label">
+                        <i class="fas fa-envelope"></i> Correo Electrónico
+                    </label>
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                        <div class="text-danger">{{ form.email.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- SECCIÓN: SEGURIDAD -->
+            <div class="section-title" style="margin-top: 30px;">
+                <i class="fas fa-lock"></i> Seguridad
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="id_password" class="form-label">
+                        <i class="fas fa-lock"></i> Contraseña
+                    </label>
+                    {{ form.password }}
+                    {% if form.password.errors %}
+                        <div class="text-danger">{{ form.password.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_password_confirm" class="form-label">
+                        <i class="fas fa-lock"></i> Confirmar
+                    </label>
+                    {{ form.password_confirm }}
+                    {% if form.password_confirm.errors %}
+                        <div class="text-danger">{{ form.password_confirm.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- ERRORES GENERALES -->
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger" style="margin-top: 20px;">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            
+            <div class="btn-container">
+                <button type="submit" class="btn btn-submit">
+                    <i class="fas fa-check"></i> Crear Cuenta
+                </button>
+                <a href="{% url 'login' %}" class="btn btn-back">
+                    <i class="fas fa-arrow-left"></i> Volver
+                </a>
+            </div>
+        </form>
+
+        <div class="footer-text">
+            ¿Ya tienes cuenta? <a href="{% url 'login' %}">Inicia sesión</a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        setTimeout(function() {
+            let alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                let bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            });
+        }, 5000);
+    </script>
+</body>
+</html>
