@@ -99,11 +99,23 @@ WSGI_APPLICATION = 'ras.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('MYSQL_DATABASE'),
-        'USER': os.environ.get('MYSQLUSER'),
-        'PASSWORD': os.environ.get('MYSQLPASSWORD'),
-        'HOST': os.environ.get('MYSQLHOST'),
-        'PORT': os.environ.get('MYSQLPORT', '3306'),
+        'NAME': 'railway',
+        'USER': 'root',
+        'PASSWORD': 'zozKbyYKpOPtbZsgpEeMKCXglLpDtTON',
+        'HOST': 'mysql.railway.internal',
+        'PORT': '3306'
+
+    }
+}
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.environ.get('railway'),
+        'USER': os.environ.get('root'),
+        'PASSWORD': os.environ.get('zozKbyYKpOPtbZsgpEeMKCXglLpDtTON'),
+        'HOST': os.environ.get('mysql.railway.internal'),
+        'PORT': os.environ.get('3306'),
     }
 }
 
