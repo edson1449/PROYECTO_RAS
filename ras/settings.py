@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-xni)vpo%pu6+i-^*1bi13fw#fjo32xw+c(%vl_t7g6rl+*5ppn
 DEBUG = True
 
 ALLOWED_HOSTS = [
-
+    'proyectoras.pythonanywhere.com'
 ]
 
 STATIC_URL = '/static/'
