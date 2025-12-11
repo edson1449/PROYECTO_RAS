@@ -25,8 +25,8 @@ class Migration(migrations.Migration):
                 ('cod_centro_fk', models.IntegerField(blank=True, null=True)),
             ],
             options={
-                'db_table': 'usuario',
-                'managed': False,
+                'db_table': 'usuarios',
+                
             },
         ),
     ]

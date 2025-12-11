@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'centro_formacion',
-                'managed': False,
+                
             },
         ),
     ]

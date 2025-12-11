@@ -37,5 +37,6 @@ class Usuario(models.Model):
         return f"{self.nombre} (ID: {self.id})"
 
     class Meta:
-        db_table = 'usuario'
-        managed = False
+        db_table = 'usuarios'
+
+        

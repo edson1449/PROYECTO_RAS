@@ -27,7 +27,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
 
-    'proyectoras-production-6931.up.railway.app'
 ]
 
 STATIC_URL = '/static/'
@@ -59,7 +58,7 @@ INSTALLED_APPS = [
 ]
 LOGIN_URL = '/login/'
 
-CSFR_TRUSTED_ORIGINS = ['https://proyectoras-production-dead.up.railway.app']
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -99,10 +98,10 @@ WSGI_APPLICATION = 'ras.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'railway',
-        'USER': 'root',
-        'PASSWORD': 'pxPcALNCFdxSbDGkXWLrlvAQPnNATSDI',
-        'HOST': 'mysql.railway.internal',
+        'NAME': 'blmtsh7tzxub9anwt1nk',
+        'USER': 'uoe1pohlcd6lswgl',
+        'PASSWORD': 'qUJPdrNBaWbTwJhjID59',
+        'HOST': 'blmtsh7tzxub9anwt1nk-mysql.services.clever-cloud.com',
         'PORT': '3306'
 
     }
