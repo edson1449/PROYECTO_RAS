@@ -25,7 +25,10 @@ SECRET_KEY = 'django-insecure-xni)vpo%pu6+i-^*1bi13fw#fjo32xw+c(%vl_t7g6rl+*5ppn
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+
+    'proyectoras-production-6931.up.railway.app'
+]
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
@@ -91,7 +94,7 @@ WSGI_APPLICATION = 'ras.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.mysqlite',
         'NAME': 'railway',
         'USER': 'root',
         'PASSWORD': 'aiUkXUSArZjhoytarXSbnhVvAgEchtIS',
